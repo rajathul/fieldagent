@@ -1,0 +1,923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FieldAgent — Work Reporting</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0e1117;
+    --surface: #161b24;
+    --surface2: #1e2533;
+    --border: #2a3244;
+    --accent: #00d4aa;
+    --accent-dim: rgba(0,212,170,0.12);
+    --accent-glow: rgba(0,212,170,0.25);
+    --warn: #f5a623;
+    --warn-dim: rgba(245,166,35,0.12);
+    --danger: #ff5f5f;
+    --danger-dim: rgba(255,95,95,0.12);
+    --text: #e2e8f0;
+    --text-muted: #6b7a99;
+    --text-dim: #3d4f6e;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── Header ── */
+  header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+    flex-shrink: 0;
+    gap: 12px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.05em;
+  }
+
+  .logo-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 8px var(--accent-glow);
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.85); }
+  }
+
+  .session-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    max-width: 520px;
+  }
+
+  select, .session-bar button {
+    font-family: var(--sans);
+    font-size: 13px;
+    background: var(--surface2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 7px 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s;
+    outline: none;
+  }
+
+  select { flex: 1; }
+
+  select:focus, .session-bar button:hover {
+    border-color: var(--accent);
+    background: var(--surface);
+  }
+
+  .btn-start {
+    background: var(--accent) !important;
+    color: #0e1117 !important;
+    font-weight: 600 !important;
+    border-color: var(--accent) !important;
+    white-space: nowrap;
+  }
+
+  .btn-start:hover {
+    background: #00eebc !important;
+    border-color: #00eebc !important;
+  }
+
+  .session-info {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  /* ── Main layout ── */
+  .main {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  /* ── Chat panel ── */
+  .chat-panel {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    scroll-behavior: smooth;
+  }
+
+  .messages::-webkit-scrollbar { width: 4px; }
+  .messages::-webkit-scrollbar-track { background: transparent; }
+  .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  /* ── Empty state ── */
+  .empty-state {
+    margin: auto;
+    text-align: center;
+    padding: 40px 20px;
+  }
+
+  .empty-state .icon {
+    font-size: 40px;
+    margin-bottom: 16px;
+    opacity: 0.4;
+  }
+
+  .empty-state h2 {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .empty-state p {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+    max-width: 360px;
+  }
+
+  .empty-hints {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 20px;
+    align-items: center;
+  }
+
+  .hint-chip {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 12px;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.15s;
+    font-family: var(--mono);
+  }
+
+  .hint-chip:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  /* ── Messages ── */
+  .msg {
+    display: flex;
+    gap: 12px;
+    animation: fadein 0.25s ease;
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(6px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .msg.worker { flex-direction: row-reverse; }
+
+  .avatar {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  .msg.agent .avatar {
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  .msg.worker .avatar {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+  }
+
+  .bubble {
+    max-width: 72%;
+    padding: 12px 16px;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 1.65;
+  }
+
+  .msg.agent .bubble {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px 12px 12px 12px;
+  }
+
+  .msg.worker .bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 12px 4px 12px 12px;
+    color: var(--text);
+  }
+
+  .bubble strong { color: var(--accent); font-weight: 600; }
+  .bubble em { color: var(--text-muted); font-style: normal; font-size: 12px; }
+
+  /* ── Typing indicator ── */
+  .typing-indicator {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .typing-dots {
+    display: flex;
+    gap: 4px;
+    padding: 14px 18px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px 12px 12px 12px;
+  }
+
+  .typing-dots span {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    opacity: 0.3;
+    animation: dot-bounce 1.2s ease-in-out infinite;
+  }
+
+  .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+  .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+  @keyframes dot-bounce {
+    0%, 80%, 100% { opacity: 0.3; transform: scale(1); }
+    40% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* ── Work log panel ── */
+  .worklog-panel {
+    width: 340px;
+    border-left: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .worklog-header {
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--border);
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .worklog-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px;
+  }
+
+  .worklog-content::-webkit-scrollbar { width: 4px; }
+  .worklog-content::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+  .worklog-empty {
+    text-align: center;
+    padding: 40px 16px;
+    color: var(--text-dim);
+    font-size: 12px;
+    font-family: var(--mono);
+  }
+
+  .wl-section {
+    margin-bottom: 16px;
+  }
+
+  .wl-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 500;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 6px;
+  }
+
+  .wl-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .badge-complete { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent); }
+  .badge-prevented { background: var(--warn-dim); color: var(--warn); border: 1px solid var(--warn); }
+  .badge-pending { background: var(--surface2); color: var(--text-muted); border: 1px solid var(--border); }
+  .badge-billable { background: var(--accent-dim); color: var(--accent); }
+  .badge-notbillable { background: var(--surface2); color: var(--text-muted); }
+
+  .wl-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 13px;
+    padding: 4px 0;
+    border-bottom: 1px solid var(--border);
+    gap: 8px;
+  }
+
+  .wl-row:last-child { border-bottom: none; }
+  .wl-row-key { color: var(--text-muted); font-size: 12px; flex-shrink: 0; }
+  .wl-row-val { color: var(--text); text-align: right; font-family: var(--mono); font-size: 12px; }
+
+  .wl-cost-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    background: var(--accent-dim);
+    border: 1px solid var(--accent);
+    border-radius: 6px;
+    margin-top: 8px;
+    font-family: var(--mono);
+  }
+
+  .wl-cost-total .label { font-size: 11px; color: var(--accent); text-transform: uppercase; letter-spacing: 0.06em; }
+  .wl-cost-total .amount { font-size: 18px; font-weight: 500; color: var(--accent); }
+
+  .flag-item {
+    padding: 8px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+
+  .flag-critical { background: var(--danger-dim); border-left: 3px solid var(--danger); color: var(--text); }
+  .flag-warning  { background: var(--warn-dim);   border-left: 3px solid var(--warn);   color: var(--text); }
+  .flag-info     { background: var(--surface2);   border-left: 3px solid var(--border); color: var(--text-muted); }
+
+  .flag-type {
+    font-family: var(--mono);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 3px;
+  }
+
+  .flag-critical .flag-type { color: var(--danger); }
+  .flag-warning  .flag-type { color: var(--warn); }
+
+  .material-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    padding: 5px 0;
+    border-bottom: 1px dashed var(--border);
+    gap: 8px;
+  }
+
+  .material-item:last-child { border-bottom: none; }
+  .material-name { color: var(--text); flex: 1; }
+  .material-meta { color: var(--text-muted); font-family: var(--mono); white-space: nowrap; }
+
+  .json-toggle {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    padding: 8px 0;
+    user-select: none;
+    border-top: 1px solid var(--border);
+    margin-top: 12px;
+  }
+
+  .json-toggle:hover { color: var(--accent); }
+
+  .json-raw {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px;
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--text-muted);
+    overflow-x: auto;
+    white-space: pre;
+    margin-top: 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    display: none;
+  }
+
+  /* ── Input bar ── */
+  .input-bar {
+    padding: 14px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+    display: flex;
+    gap: 10px;
+    align-items: flex-end;
+    flex-shrink: 0;
+  }
+
+  .input-wrap {
+    flex: 1;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: flex-end;
+    padding: 10px 14px;
+    transition: border-color 0.15s;
+    gap: 8px;
+  }
+
+  .input-wrap:focus-within {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-dim);
+  }
+
+  textarea {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 14px;
+    line-height: 1.5;
+    resize: none;
+    min-height: 22px;
+    max-height: 120px;
+    overflow-y: auto;
+  }
+
+  textarea::placeholder { color: var(--text-dim); }
+
+  .send-btn {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: var(--accent);
+    border: none;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: #0e1117;
+    transition: background 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .send-btn:hover { background: #00eebc; }
+  .send-btn:active { transform: scale(0.93); }
+  .send-btn:disabled { background: var(--border); cursor: not-allowed; color: var(--text-dim); }
+
+  .send-btn svg { width: 16px; height: 16px; }
+
+  /* ── Status bar ── */
+  .status-bar {
+    padding: 5px 20px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    background: var(--bg);
+    border-top: 1px solid var(--border);
+    flex-shrink: 0;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 700px) {
+    .worklog-panel { display: none; }
+    .bubble { max-width: 88%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">
+    <div class="logo-dot"></div>
+    FIELDAGENT
+  </div>
+
+  <div class="session-bar">
+    <select id="workerSelect">
+      <option value="W-001">W-001 — Pekka Virtanen (Senior Technician)</option>
+      <option value="W-002">W-002 — Janne Korhonen (Technician)</option>
+      <option value="W-003">W-003 — Lauri Heikkinen (Junior)</option>
+      <option value="W-004">W-004 — Sanna Makela (Technician)</option>
+    </select>
+    <button class="btn-start" onclick="startSession()">New Session</button>
+  </div>
+
+  <div class="session-info" id="sessionInfo">no session</div>
+</header>
+
+<div class="main">
+  <div class="chat-panel">
+    <div class="messages" id="messages">
+      <div class="empty-state" id="emptyState">
+        <div class="icon">🔧</div>
+        <h2>Work Reporting Agent</h2>
+        <p>Select a worker and start a new session, then describe what you did or what you're about to do.</p>
+        <div class="empty-hints">
+          <div class="hint-chip" onclick="sendHint(this)">replaced 3 LED tube lights at greenfield sports hall, 1 hour</div>
+          <div class="hint-chip" onclick="sendHint(this)">im at frostbite, cold storage B is warm, gonna top up the refrigerant</div>
+          <div class="hint-chip" onclick="sendHint(this)">heading to the shopping center for the monthly HVAC check</div>
+          <div class="hint-chip" onclick="sendHint(this)">what's next for me today?</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="input-bar">
+      <div class="input-wrap">
+        <textarea
+          id="msgInput"
+          placeholder="Describe what you did or what you're about to do..."
+          rows="1"
+          onkeydown="handleKey(event)"
+          oninput="autoResize(this)"
+          disabled
+        ></textarea>
+      </div>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+
+    <div class="status-bar">
+      <span id="statusText">start a session to begin</span>
+      <span id="apiUrl">http://localhost:8000</span>
+    </div>
+  </div>
+
+  <div class="worklog-panel">
+    <div class="worklog-header">Work Log</div>
+    <div class="worklog-content" id="worklogContent">
+      <div class="worklog-empty">work log appears<br>after confirmation</div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://localhost:8000';
+let sessionId = null;
+let isLoading = false;
+
+// ── Session ──────────────────────────────────────────────────
+async function startSession() {
+  const workerId = document.getElementById('workerSelect').value;
+  const date = '2026-03-25';
+
+  try {
+    setStatus('creating session…');
+    const res = await fetch(`${API}/session`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ worker_id: workerId, date })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    sessionId = data.session_id;
+
+    document.getElementById('sessionInfo').textContent =
+      `${data.worker_name} · ${date} · ${sessionId.slice(0, 8)}`;
+    document.getElementById('msgInput').disabled = false;
+    document.getElementById('sendBtn').disabled = false;
+    document.getElementById('msgInput').focus();
+
+    clearMessages();
+    clearWorkLog();
+    setStatus('session active');
+
+    addAgentMessage(`Hi ${data.worker_name.split(' ')[0]}! What have you been working on, or what are you about to do?`);
+
+  } catch (e) {
+    setStatus(`error: ${e.message} — is the server running?`);
+  }
+}
+
+// ── Messaging ────────────────────────────────────────────────
+async function sendMessage() {
+  if (!sessionId || isLoading) return;
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text) return;
+
+  input.value = '';
+  autoResize(input);
+  addWorkerMessage(text);
+  showTyping();
+  setLoading(true);
+
+  try {
+    const res = await fetch(`${API}/message`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ session_id: sessionId, content: text })
+    });
+
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+
+    hideTyping();
+    addAgentMessage(data.response);
+
+    if (data.finalized && data.work_log) {
+      renderWorkLog(data.work_log);
+      setStatus('work log saved ✓');
+    } else {
+      setStatus('session active');
+    }
+
+  } catch (e) {
+    hideTyping();
+    addAgentMessage(`⚠️ Error: ${e.message}. Is the server running at ${API}?`);
+    setStatus(`error: ${e.message}`);
+  } finally {
+    setLoading(false);
+  }
+}
+
+function sendHint(el) {
+  if (!sessionId) {
+    startSession().then(() => {
+      setTimeout(() => {
+        document.getElementById('msgInput').value = el.textContent;
+        sendMessage();
+      }, 600);
+    });
+    return;
+  }
+  document.getElementById('msgInput').value = el.textContent;
+  sendMessage();
+}
+
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) {
+    e.preventDefault();
+    sendMessage();
+  }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+}
+
+// ── DOM helpers ───────────────────────────────────────────────
+function clearMessages() {
+  const msgs = document.getElementById('messages');
+  msgs.innerHTML = '';
+}
+
+function addWorkerMessage(text) {
+  removeEmptyState();
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg worker';
+  div.innerHTML = `
+    <div class="avatar">👷</div>
+    <div class="bubble">${escHtml(text)}</div>
+  `;
+  msgs.appendChild(div);
+  scrollBottom();
+}
+
+function addAgentMessage(text) {
+  removeEmptyState();
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg agent';
+  div.innerHTML = `
+    <div class="avatar">FA</div>
+    <div class="bubble">${formatAgentText(text)}</div>
+  `;
+  msgs.appendChild(div);
+  scrollBottom();
+}
+
+function showTyping() {
+  removeEmptyState();
+  const msgs = document.getElementById('messages');
+  const div = document.createElement('div');
+  div.className = 'msg agent';
+  div.id = 'typingIndicator';
+  div.innerHTML = `
+    <div class="avatar">FA</div>
+    <div class="typing-dots">
+      <span></span><span></span><span></span>
+    </div>
+  `;
+  msgs.appendChild(div);
+  scrollBottom();
+}
+
+function hideTyping() {
+  const el = document.getElementById('typingIndicator');
+  if (el) el.remove();
+}
+
+function removeEmptyState() {
+  const el = document.getElementById('emptyState');
+  if (el) el.remove();
+}
+
+function scrollBottom() {
+  const msgs = document.getElementById('messages');
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function setStatus(text) {
+  document.getElementById('statusText').textContent = text;
+}
+
+function setLoading(v) {
+  isLoading = v;
+  document.getElementById('sendBtn').disabled = v;
+  document.getElementById('msgInput').disabled = v;
+  if (!v) document.getElementById('msgInput').focus();
+}
+
+function escHtml(str) {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/\n/g, '<br>');
+}
+
+function formatAgentText(text) {
+  // Bold **text**
+  text = text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+  // Italic _text_ or *text*
+  text = text.replace(/\*(.+?)\*/g, '<em>$1</em>');
+  // Line breaks
+  text = text.replace(/\n/g, '<br>');
+  return text;
+}
+
+// ── Work Log Renderer ─────────────────────────────────────────
+function clearWorkLog() {
+  document.getElementById('worklogContent').innerHTML =
+    '<div class="worklog-empty">work log appears<br>after confirmation</div>';
+}
+
+function renderWorkLog(log) {
+  const inv = log.invoice_item;
+  const statusClass = {
+    complete: 'badge-complete',
+    prevented: 'badge-prevented',
+    pending_approval: 'badge-pending',
+    pending_review: 'badge-pending',
+  }[log.status] || 'badge-pending';
+
+  let html = '';
+
+  // Status + billability
+  html += `<div class="wl-section">
+    <div class="wl-label">Status</div>
+    <span class="wl-badge ${statusClass}">${log.status.replace('_', ' ')}</span>
+    &nbsp;
+    <span class="wl-badge ${log.billable ? 'badge-billable' : 'badge-notbillable'}">
+      ${log.billable ? '✓ billable' : '✗ not billable'}
+    </span>
+  </div>`;
+
+  // Job details
+  html += `<div class="wl-section">
+    <div class="wl-label">Job</div>
+    <div class="wl-row"><span class="wl-row-key">Customer</span><span class="wl-row-val">${log.customer_id}</span></div>
+    <div class="wl-row"><span class="wl-row-key">Site</span><span class="wl-row-val">${log.site_id}</span></div>
+    <div class="wl-row"><span class="wl-row-key">Category</span><span class="wl-row-val">${log.service_category}</span></div>
+    <div class="wl-row"><span class="wl-row-key">Type</span><span class="wl-row-val">${log.work_type.replace('_', ' ')}</span></div>
+    <div class="wl-row"><span class="wl-row-key">Date</span><span class="wl-row-val">${log.date}</span></div>
+    <div class="wl-row"><span class="wl-row-key">Hours</span><span class="wl-row-val">${log.hours_worked}h</span></div>
+  </div>`;
+
+  // Materials
+  if (log.materials && log.materials.length > 0) {
+    html += `<div class="wl-section">
+      <div class="wl-label">Materials (${log.materials.length})</div>`;
+    log.materials.forEach(m => {
+      html += `<div class="material-item">
+        <span class="material-name">${m.name}</span>
+        <span class="material-meta">×${m.quantity} · ${(m.total_price).toFixed(2)}€</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Invoice pricing
+  if (inv) {
+    html += `<div class="wl-section">
+      <div class="wl-label">Pricing</div>
+      <div class="wl-row"><span class="wl-row-key">Rate</span><span class="wl-row-val">${inv.rate_type} · ${inv.hourly_rate}€/h</span></div>
+      <div class="wl-row"><span class="wl-row-key">Labor</span><span class="wl-row-val">${inv.labor_cost.toFixed(2)} €</span></div>
+      <div class="wl-row"><span class="wl-row-key">Materials</span><span class="wl-row-val">${inv.materials_cost.toFixed(2)} € (+${inv.material_markup_percentage}%)</span></div>
+      ${inv.travel_cost > 0 ? `<div class="wl-row"><span class="wl-row-key">Travel</span><span class="wl-row-val">${inv.travel_cost.toFixed(2)} €</span></div>` : ''}
+      <div class="wl-cost-total">
+        <span class="label">Total</span>
+        <span class="amount">${inv.total_cost.toFixed(2)} €</span>
+      </div>
+      ${inv.requires_approval ? `<div style="margin-top:8px;padding:8px 10px;background:var(--warn-dim);border:1px solid var(--warn);border-radius:6px;font-size:12px;color:var(--warn);">⚠ Approval required: ${inv.approval_reason || ''}</div>` : ''}
+    </div>`;
+  }
+
+  // Billability reasoning
+  html += `<div class="wl-section">
+    <div class="wl-label">Reasoning</div>
+    <div style="font-size:12px;line-height:1.6;color:var(--text-muted)">${escHtml(log.billability_reasoning)}</div>
+  </div>`;
+
+  // Compliance flags
+  if (log.compliance_flags && log.compliance_flags.length > 0) {
+    html += `<div class="wl-section">
+      <div class="wl-label">Compliance (${log.compliance_flags.length})</div>`;
+    log.compliance_flags.forEach(f => {
+      html += `<div class="flag-item flag-${f.severity}">
+        <div class="flag-type">${f.severity} · ${f.type}</div>
+        ${escHtml(f.description)}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Raw JSON toggle
+  html += `<div class="json-toggle" onclick="toggleJson(this)">▶ view raw json</div>
+  <pre class="json-raw">${escHtml(JSON.stringify(log, null, 2))}</pre>`;
+
+  document.getElementById('worklogContent').innerHTML = html;
+}
+
+function toggleJson(el) {
+  const pre = el.nextElementSibling;
+  const open = pre.style.display === 'block';
+  pre.style.display = open ? 'none' : 'block';
+  el.textContent = open ? '▶ view raw json' : '▼ hide raw json';
+}
+
+// Auto-start with default worker on load
+window.addEventListener('load', () => {
+  document.getElementById('msgInput').addEventListener('input', autoResize);
+});
+</script>
+</body>
+</html>

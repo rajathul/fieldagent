@@ -1,0 +1,108 @@
+{
+  "work_queue": [
+    {
+      "job_id": "JOB-2026-041",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S1",
+      "priority": "normal",
+      "category": "HVAC",
+      "description": "Monthly HVAC inspection - March. Check all 4 rooftop AHUs, replace filters as needed, verify thermostat calibration.",
+      "scheduled_date": "2026-03-25",
+      "estimated_hours": 5,
+      "assigned_worker_id": "W-001",
+      "expected_parts": ["FLT-AHU-01", "FLT-AHU-02", "BLT-FAN-02"],
+      "notes": "March 10 inspection (WR-2026-001) found AHU-1 fan belt showing wear. Check and replace if needed."
+    },
+    {
+      "job_id": "JOB-2026-042",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "priority": "urgent",
+      "category": "Dock Maintenance",
+      "description": "Dock door 5 not sealing properly. Cold air leaking into loading area. Likely door seals and possibly track alignment.",
+      "scheduled_date": "2026-03-22",
+      "estimated_hours": 3,
+      "assigned_worker_id": "W-003",
+      "expected_parts": ["DOK-SEAL-01", "DOK-SEAL-02", "DOK-ROLL-01"],
+      "notes": "Warehouse manager reports frost buildup near door 5. Affecting adjacent cold storage temperatures."
+    },
+    {
+      "job_id": "JOB-2026-043",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S1",
+      "priority": "normal",
+      "category": "Minor Electrical",
+      "description": "Replace flickering lights in classroom 105 and hallway B. Teachers have complained about headaches.",
+      "scheduled_date": "2026-03-24",
+      "estimated_hours": 1.5,
+      "assigned_worker_id": "W-002",
+      "expected_parts": ["FIX-LED-02"],
+      "notes": "School requests work to be done after 15:00 when students have left."
+    },
+    {
+      "job_id": "JOB-2026-044",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S2",
+      "priority": "normal",
+      "category": "Plumbing",
+      "description": "Dripping faucet in 4th floor kitchen. Reported by tenant.",
+      "scheduled_date": "2026-03-26",
+      "estimated_hours": 1,
+      "assigned_worker_id": "W-002",
+      "expected_parts": ["PLB-FAUC-01", "SEAL-THREAD-01", "PLB-TRAP-01"],
+      "notes": "Tenant in suite 410. Call Anna Korhonen for access."
+    },
+    {
+      "job_id": "JOB-2026-045",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "priority": "normal",
+      "category": "Refrigeration",
+      "description": "Monthly scheduled maintenance - March. Full system inspection, filter replacement, refrigerant check, temperature calibration, defrost test.",
+      "scheduled_date": "2026-03-28",
+      "estimated_hours": 8,
+      "assigned_worker_id": "W-001",
+      "expected_parts": ["FLT-COND-01", "CAL-TEMP-01"],
+      "notes": "Check compressor C-A2 contactor replaced in October (WR-2025-005) -- verify still functioning correctly."
+    },
+    {
+      "job_id": "JOB-2026-046",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S3",
+      "priority": "normal",
+      "category": "Ventilation",
+      "description": "Quarterly ventilation filter replacement - Sports Hall. All 3 AHUs.",
+      "scheduled_date": "2026-03-27",
+      "estimated_hours": 4,
+      "assigned_worker_id": "W-002",
+      "expected_parts": ["FLT-VENT-01", "FLT-VENT-02", "BLT-FAN-01"],
+      "notes": "Last done October 14 (WR-2025-009). Fan belt on AHU-2 was replaced then -- check the other two."
+    },
+    {
+      "job_id": "JOB-2026-047",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S3",
+      "priority": "urgent",
+      "category": "Electrical",
+      "description": "Emergency lighting annual test due. Test all units in warehouse and verify battery backup duration.",
+      "scheduled_date": "2026-03-23",
+      "estimated_hours": 3,
+      "assigned_worker_id": "W-002",
+      "expected_parts": ["BAT-EMRG-01", "FIX-EMRG-01"],
+      "notes": "Previous test at NPS-S1 (WR-2025-003) found 3 dead batteries and 1 faulty fixture. Bring spares."
+    },
+    {
+      "job_id": "JOB-2026-048",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S2",
+      "priority": "low",
+      "category": "Heating",
+      "description": "Preventive check on 2nd floor east wing radiators. Were bled and pressure topped up in October (WR-2025-008). Verify air hasn't accumulated again.",
+      "scheduled_date": "2026-03-31",
+      "estimated_hours": 1.5,
+      "assigned_worker_id": "W-002",
+      "expected_parts": [],
+      "notes": "If air is recurring, may indicate a system leak. Report findings so we can scope a larger investigation."
+    }
+  ]
+}

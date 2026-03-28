@@ -1,0 +1,495 @@
+{
+  "parts": [
+    {
+      "part_id": "FLT-AHU-01",
+      "name": "AHU Filter Panel 592x592x48mm",
+      "category": "HVAC",
+      "subcategory": "Filters",
+      "unit": "piece",
+      "unit_price": 12.50
+    },
+    {
+      "part_id": "FLT-AHU-02",
+      "name": "AHU Filter Panel 287x592x48mm",
+      "category": "HVAC",
+      "subcategory": "Filters",
+      "unit": "piece",
+      "unit_price": 9.80
+    },
+    {
+      "part_id": "FLT-VENT-01",
+      "name": "Ventilation Filter G4 592x592x48mm",
+      "category": "Ventilation",
+      "subcategory": "Filters",
+      "unit": "piece",
+      "unit_price": 8.50
+    },
+    {
+      "part_id": "FLT-VENT-02",
+      "name": "Ventilation Filter F7 592x592x48mm",
+      "category": "Ventilation",
+      "subcategory": "Filters",
+      "unit": "piece",
+      "unit_price": 18.00
+    },
+    {
+      "part_id": "FLT-COND-01",
+      "name": "Condenser Filter 600x300mm",
+      "category": "Refrigeration",
+      "subcategory": "Filters",
+      "unit": "piece",
+      "unit_price": 28.00
+    },
+    {
+      "part_id": "BLT-FAN-01",
+      "name": "Fan Belt V-Belt A42",
+      "category": "Ventilation",
+      "subcategory": "Drive Components",
+      "unit": "piece",
+      "unit_price": 14.00
+    },
+    {
+      "part_id": "BLT-FAN-02",
+      "name": "Fan Belt V-Belt A38",
+      "category": "HVAC",
+      "subcategory": "Drive Components",
+      "unit": "piece",
+      "unit_price": 12.50
+    },
+    {
+      "part_id": "REF-R410A",
+      "name": "Refrigerant R-410A (1kg)",
+      "category": "HVAC",
+      "subcategory": "Refrigerants",
+      "unit": "kg",
+      "unit_price": 45.00,
+      "requires_certification": "Refrigerant Handling Certificate"
+    },
+    {
+      "part_id": "REF-R449A",
+      "name": "Refrigerant R-449A (1kg)",
+      "category": "Refrigeration",
+      "subcategory": "Refrigerants",
+      "unit": "kg",
+      "unit_price": 52.00,
+      "requires_certification": "Refrigerant Handling Certificate"
+    },
+    {
+      "part_id": "REF-R134A",
+      "name": "Refrigerant R-134a (1kg)",
+      "category": "Refrigeration",
+      "subcategory": "Refrigerants",
+      "unit": "kg",
+      "unit_price": 38.00,
+      "requires_certification": "Refrigerant Handling Certificate"
+    },
+    {
+      "part_id": "VLV-EXP-01",
+      "name": "Thermal Expansion Valve 3/8\"",
+      "category": "HVAC",
+      "subcategory": "Valves",
+      "unit": "piece",
+      "unit_price": 85.00
+    },
+    {
+      "part_id": "VLV-EXP-02",
+      "name": "Thermal Expansion Valve 1/2\"",
+      "category": "Refrigeration",
+      "subcategory": "Valves",
+      "unit": "piece",
+      "unit_price": 110.00
+    },
+    {
+      "part_id": "VLV-BALL-01",
+      "name": "Ball Valve 3/4\" Brass",
+      "category": "Plumbing",
+      "subcategory": "Valves",
+      "unit": "piece",
+      "unit_price": 18.00
+    },
+    {
+      "part_id": "VLV-RAD-01",
+      "name": "Radiator Thermostatic Valve",
+      "category": "Heating",
+      "subcategory": "Valves",
+      "unit": "piece",
+      "unit_price": 32.00
+    },
+    {
+      "part_id": "FIT-FLARE-01",
+      "name": "Copper Flare Fitting Set",
+      "category": "HVAC",
+      "subcategory": "Fittings",
+      "unit": "set",
+      "unit_price": 18.50
+    },
+    {
+      "part_id": "FIT-COP-01",
+      "name": "Copper Coupling 3/4\"",
+      "category": "Plumbing",
+      "subcategory": "Fittings",
+      "unit": "piece",
+      "unit_price": 4.50
+    },
+    {
+      "part_id": "FIT-COP-02",
+      "name": "Copper Elbow 3/4\" 90deg",
+      "category": "Plumbing",
+      "subcategory": "Fittings",
+      "unit": "piece",
+      "unit_price": 5.20
+    },
+    {
+      "part_id": "FIT-COP-03",
+      "name": "Copper Tee 3/4\"",
+      "category": "Plumbing",
+      "subcategory": "Fittings",
+      "unit": "piece",
+      "unit_price": 6.80
+    },
+    {
+      "part_id": "PIP-COP-01",
+      "name": "Copper Pipe 3/4\" (1m section)",
+      "category": "Plumbing",
+      "subcategory": "Pipes",
+      "unit": "meter",
+      "unit_price": 22.00
+    },
+    {
+      "part_id": "PIP-COP-02",
+      "name": "Copper Pipe 1/2\" (1m section)",
+      "category": "Plumbing",
+      "subcategory": "Pipes",
+      "unit": "meter",
+      "unit_price": 16.00
+    },
+    {
+      "part_id": "SOL-FLUX-01",
+      "name": "Soldering Flux and Solder Kit",
+      "category": "Plumbing",
+      "subcategory": "Consumables",
+      "unit": "kit",
+      "unit_price": 12.00
+    },
+    {
+      "part_id": "SEAL-THREAD-01",
+      "name": "PTFE Thread Seal Tape (10m roll)",
+      "category": "Plumbing",
+      "subcategory": "Consumables",
+      "unit": "roll",
+      "unit_price": 2.50
+    },
+    {
+      "part_id": "SEAL-DOOR-01",
+      "name": "Cold Storage Door Seal Kit (-25C rated)",
+      "category": "Refrigeration",
+      "subcategory": "Seals",
+      "unit": "kit",
+      "unit_price": 120.00
+    },
+    {
+      "part_id": "SEAL-DOOR-02",
+      "name": "Cold Storage Door Seal Kit (+2C rated)",
+      "category": "Refrigeration",
+      "subcategory": "Seals",
+      "unit": "kit",
+      "unit_price": 85.00
+    },
+    {
+      "part_id": "THERM-01",
+      "name": "Room Thermostat Digital",
+      "category": "HVAC",
+      "subcategory": "Controls",
+      "unit": "piece",
+      "unit_price": 45.00
+    },
+    {
+      "part_id": "THERM-02",
+      "name": "Radiator Thermostat Head",
+      "category": "Heating",
+      "subcategory": "Controls",
+      "unit": "piece",
+      "unit_price": 18.00
+    },
+    {
+      "part_id": "CAL-TEMP-01",
+      "name": "Temperature Sensor Calibration Fluid",
+      "category": "Refrigeration",
+      "subcategory": "Consumables",
+      "unit": "bottle",
+      "unit_price": 35.00
+    },
+    {
+      "part_id": "ELC-CONT-01",
+      "name": "Compressor Contactor 40A 3-pole",
+      "category": "Refrigeration",
+      "subcategory": "Electrical Components",
+      "unit": "piece",
+      "unit_price": 55.00
+    },
+    {
+      "part_id": "ELC-CAP-01",
+      "name": "Run Capacitor 45uF 440V",
+      "category": "Refrigeration",
+      "subcategory": "Electrical Components",
+      "unit": "piece",
+      "unit_price": 28.00
+    },
+    {
+      "part_id": "ELC-CAP-02",
+      "name": "Start Capacitor 80uF 250V",
+      "category": "Refrigeration",
+      "subcategory": "Electrical Components",
+      "unit": "piece",
+      "unit_price": 22.00
+    },
+    {
+      "part_id": "BAT-EMRG-01",
+      "name": "Emergency Light Battery Pack NiCd 3.6V",
+      "category": "Electrical",
+      "subcategory": "Batteries",
+      "unit": "piece",
+      "unit_price": 22.00
+    },
+    {
+      "part_id": "FIX-EMRG-01",
+      "name": "Emergency Light Fixture LED 3W",
+      "category": "Electrical",
+      "subcategory": "Lighting",
+      "unit": "piece",
+      "unit_price": 67.00
+    },
+    {
+      "part_id": "FIX-LED-01",
+      "name": "LED Panel Light 600x600mm 40W",
+      "category": "Electrical",
+      "subcategory": "Lighting",
+      "unit": "piece",
+      "unit_price": 42.00
+    },
+    {
+      "part_id": "FIX-LED-02",
+      "name": "LED Tube T8 1200mm 18W",
+      "category": "Electrical",
+      "subcategory": "Lighting",
+      "unit": "piece",
+      "unit_price": 8.50
+    },
+    {
+      "part_id": "ELC-OUTL-01",
+      "name": "Wall Outlet Schuko (with frame)",
+      "category": "Electrical",
+      "subcategory": "Wiring Accessories",
+      "unit": "piece",
+      "unit_price": 12.00
+    },
+    {
+      "part_id": "ELC-SWTCH-01",
+      "name": "Light Switch Single (with frame)",
+      "category": "Electrical",
+      "subcategory": "Wiring Accessories",
+      "unit": "piece",
+      "unit_price": 10.50
+    },
+    {
+      "part_id": "PLB-FILL-01",
+      "name": "Toilet Fill Valve Universal",
+      "category": "Plumbing",
+      "subcategory": "Fixtures",
+      "unit": "piece",
+      "unit_price": 15.50
+    },
+    {
+      "part_id": "PLB-FLAP-01",
+      "name": "Toilet Flapper Valve 2\"",
+      "category": "Plumbing",
+      "subcategory": "Fixtures",
+      "unit": "piece",
+      "unit_price": 6.80
+    },
+    {
+      "part_id": "PLB-TRAP-01",
+      "name": "P-Trap 1 1/4\" Chrome",
+      "category": "Plumbing",
+      "subcategory": "Fixtures",
+      "unit": "piece",
+      "unit_price": 14.00
+    },
+    {
+      "part_id": "PLB-FAUC-01",
+      "name": "Single Lever Basin Mixer Faucet",
+      "category": "Plumbing",
+      "subcategory": "Fixtures",
+      "unit": "piece",
+      "unit_price": 85.00
+    },
+    {
+      "part_id": "DOK-SEAL-01",
+      "name": "Dock Door Bottom Seal 3m",
+      "category": "Dock Maintenance",
+      "subcategory": "Seals",
+      "unit": "piece",
+      "unit_price": 95.00
+    },
+    {
+      "part_id": "DOK-SEAL-02",
+      "name": "Dock Door Side Seal 4m",
+      "category": "Dock Maintenance",
+      "subcategory": "Seals",
+      "unit": "piece",
+      "unit_price": 110.00
+    },
+    {
+      "part_id": "DOK-ROLL-01",
+      "name": "Track Roller Bearing Assembly",
+      "category": "Dock Maintenance",
+      "subcategory": "Hardware",
+      "unit": "piece",
+      "unit_price": 32.00
+    },
+    {
+      "part_id": "DOK-BUMP-01",
+      "name": "Dock Bumper Rubber 500x250x100mm",
+      "category": "Dock Maintenance",
+      "subcategory": "Hardware",
+      "unit": "piece",
+      "unit_price": 75.00
+    },
+    {
+      "part_id": "DOK-SPRING-01",
+      "name": "Dock Door Spring Assembly",
+      "category": "Dock Maintenance",
+      "subcategory": "Hardware",
+      "unit": "piece",
+      "unit_price": 48.00
+    },
+    {
+      "part_id": "GEN-CABLE-01",
+      "name": "Cable Tie Pack (100pcs, 200mm)",
+      "category": "General",
+      "subcategory": "Consumables",
+      "unit": "pack",
+      "unit_price": 4.50
+    },
+    {
+      "part_id": "GEN-TAPE-01",
+      "name": "Insulation Tape Black (20m)",
+      "category": "General",
+      "subcategory": "Consumables",
+      "unit": "roll",
+      "unit_price": 3.20
+    },
+    {
+      "part_id": "GEN-SILICON-01",
+      "name": "Silicone Sealant Tube 310ml",
+      "category": "General",
+      "subcategory": "Consumables",
+      "unit": "tube",
+      "unit_price": 8.50
+    }
+  ],
+  "work_type_associations": [
+    {
+      "work_type": "Compressor repair or replacement",
+      "categories": ["HVAC", "Refrigeration"],
+      "typically_used_parts": ["REF-R410A", "REF-R449A", "FIT-FLARE-01", "ELC-CONT-01", "ELC-CAP-01"],
+      "note": "Compressor work almost always involves refrigerant top-up and often requires replacing contactors or capacitors"
+    },
+    {
+      "work_type": "Expansion valve replacement",
+      "categories": ["HVAC", "Refrigeration"],
+      "typically_used_parts": ["VLV-EXP-01", "VLV-EXP-02", "REF-R410A", "REF-R449A", "FIT-FLARE-01"],
+      "note": "Replacing an expansion valve requires recovering and recharging refrigerant"
+    },
+    {
+      "work_type": "Refrigerant leak repair",
+      "categories": ["HVAC", "Refrigeration"],
+      "typically_used_parts": ["REF-R410A", "REF-R449A", "REF-R134A", "FIT-FLARE-01", "SOL-FLUX-01"],
+      "note": "Leak repair requires brazing or tightening fittings and topping up lost refrigerant"
+    },
+    {
+      "work_type": "AHU maintenance / filter replacement",
+      "categories": ["HVAC"],
+      "typically_used_parts": ["FLT-AHU-01", "FLT-AHU-02", "BLT-FAN-02"],
+      "note": "Filter replacement is standard. Check fan belts while AHU is open -- often need replacement"
+    },
+    {
+      "work_type": "Ventilation maintenance / filter replacement",
+      "categories": ["Ventilation"],
+      "typically_used_parts": ["FLT-VENT-01", "FLT-VENT-02", "BLT-FAN-01"],
+      "note": "Both G4 pre-filters and F7 fine filters usually replaced together. Check fan belts"
+    },
+    {
+      "work_type": "Thermostat replacement or calibration",
+      "categories": ["HVAC", "Heating"],
+      "typically_used_parts": ["THERM-01", "THERM-02"],
+      "note": "Digital room thermostat for HVAC systems, thermostat head for radiators"
+    },
+    {
+      "work_type": "Radiator maintenance",
+      "categories": ["Heating"],
+      "typically_used_parts": ["VLV-RAD-01", "THERM-02", "SEAL-THREAD-01"],
+      "note": "Bleeding radiators uses no parts. Valve replacement needs thread seal tape"
+    },
+    {
+      "work_type": "Pipe repair (copper)",
+      "categories": ["Plumbing"],
+      "typically_used_parts": ["PIP-COP-01", "PIP-COP-02", "FIT-COP-01", "FIT-COP-02", "SOL-FLUX-01", "SEAL-THREAD-01"],
+      "note": "Pipe repair requires matching pipe size, fittings, and soldering supplies"
+    },
+    {
+      "work_type": "Toilet repair",
+      "categories": ["Plumbing", "Minor Plumbing"],
+      "typically_used_parts": ["PLB-FILL-01", "PLB-FLAP-01"],
+      "note": "Running toilets usually need fill valve, flapper, or both"
+    },
+    {
+      "work_type": "Faucet replacement",
+      "categories": ["Plumbing", "Minor Plumbing"],
+      "typically_used_parts": ["PLB-FAUC-01", "SEAL-THREAD-01", "PLB-TRAP-01"],
+      "note": "Faucet swap sometimes requires new trap if connections differ"
+    },
+    {
+      "work_type": "Emergency lighting maintenance",
+      "categories": ["Electrical", "Minor Electrical"],
+      "typically_used_parts": ["BAT-EMRG-01", "FIX-EMRG-01"],
+      "note": "Battery replacement is most common. Full fixture replacement if charging circuit is faulty"
+    },
+    {
+      "work_type": "Light fixture replacement",
+      "categories": ["Electrical", "Minor Electrical"],
+      "typically_used_parts": ["FIX-LED-01", "FIX-LED-02"],
+      "note": "Panel lights for offices/commercial, tube lights for utility areas"
+    },
+    {
+      "work_type": "Outlet or switch replacement",
+      "categories": ["Electrical", "Minor Electrical"],
+      "typically_used_parts": ["ELC-OUTL-01", "ELC-SWTCH-01"],
+      "note": "Standard Schuko outlets. Frames included"
+    },
+    {
+      "work_type": "Dock door repair",
+      "categories": ["Dock Maintenance"],
+      "typically_used_parts": ["DOK-SEAL-01", "DOK-SEAL-02", "DOK-ROLL-01", "DOK-SPRING-01"],
+      "note": "Door not closing properly usually involves seals and rollers. Springs if door is heavy/slow"
+    },
+    {
+      "work_type": "Dock bumper replacement",
+      "categories": ["Dock Maintenance"],
+      "typically_used_parts": ["DOK-BUMP-01"],
+      "note": "Worn bumpers from truck impacts. Usually replaced in pairs"
+    },
+    {
+      "work_type": "Condenser maintenance",
+      "categories": ["Refrigeration"],
+      "typically_used_parts": ["FLT-COND-01", "CAL-TEMP-01"],
+      "note": "Filter replacement and temperature calibration during scheduled maintenance"
+    },
+    {
+      "work_type": "Cold storage door seal replacement",
+      "categories": ["Refrigeration"],
+      "typically_used_parts": ["SEAL-DOOR-01", "SEAL-DOOR-02", "GEN-SILICON-01"],
+      "note": "Use -25C rated seal for freezer, +2C rated for cold storage. Silicone for minor gaps"
+    }
+  ]
+}

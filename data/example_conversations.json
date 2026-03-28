@@ -1,0 +1,407 @@
+{
+  "conversations": [
+    {
+      "title": "Clean input - straightforward repair",
+      "description": "Worker provides most information upfront. Agent confirms and produces work log entry.",
+      "messages": [
+        {
+          "role": "worker",
+          "content": "Hey, this is Janne. I just finished up at Greenfield Primary School. Fixed two running toilets in the boys restroom on the second floor. Replaced the fill valves and flappers on both. Took me about an hour and a half. Everything works now."
+        },
+        {
+          "role": "agent",
+          "content": "Got it, Janne. Let me put that together.\n\nCustomer: City of Greenfield Schools\nSite: Greenfield Primary School\nCategory: Minor Plumbing\nWork: Toilet repair - replaced fill valves and flappers in 2 toilets, boys restroom 2nd floor\nDate: Today\nTime: 1.5 hours\n\nMaterials:\n- 2x Toilet Fill Valve Universal\n- 2x Toilet Flapper Valve 2\"\n\nDoes that look right?"
+        },
+        {
+          "role": "worker",
+          "content": "Yeah that looks right."
+        },
+        {
+          "role": "agent",
+          "content": "All good. Work log created.\nNo approval needed (under the per-incident limit).\nNo issues flagged."
+        }
+      ],
+      "notes": "Agent correctly identified the customer, site, category, and work type from natural language. Used today's date without asking. Correctly applied GFS pricing and markup.",
+      "work_log": {
+        "customer_id": "GFS-001",
+        "contract_id": "GFS-2025-SM01",
+        "site_id": "GFS-S1",
+        "worker_id": "W-002",
+        "date": "2026-03-20",
+        "service_category": "Minor Plumbing",
+        "work_type": "repair",
+        "description": "Replaced fill valves and flapper valves on two running toilets in boys restroom, 2nd floor, Greenfield Primary School.",
+        "hours_worked": 1.5,
+        "materials": [
+          { "part_id": "PLB-FILL-01", "name": "Toilet Fill Valve Universal", "quantity": 2, "unit_price": 15.50, "total_price": 31.00 },
+          { "part_id": "PLB-FLAP-01", "name": "Toilet Flapper Valve 2\"", "quantity": 2, "unit_price": 6.80, "total_price": 13.60 }
+        ],
+        "status": "complete",
+        "billable": true,
+        "billability_reasoning": "Standard repair work within Minor Plumbing contract scope, performed during business hours, total cost under 500 EUR per-incident limit.",
+        "compliance_flags": [],
+        "invoice_item": {
+          "customer_id": "GFS-001",
+          "contract_id": "GFS-2025-SM01",
+          "site_id": "GFS-S1",
+          "worker_id": "W-002",
+          "date": "2026-03-20",
+          "service_category": "Minor Plumbing",
+          "work_type": "repair",
+          "description": "Replaced fill valves and flapper valves on two running toilets in boys restroom, 2nd floor, Greenfield Primary School.",
+          "hours_worked": 1.5,
+          "rate_type": "normal",
+          "hourly_rate": 62.00,
+          "labor_cost": 93.00,
+          "materials": [
+            { "part_id": "PLB-FILL-01", "name": "Toilet Fill Valve Universal", "quantity": 2, "unit_price": 15.50, "total_price": 31.00 },
+            { "part_id": "PLB-FLAP-01", "name": "Toilet Flapper Valve 2\"", "quantity": 2, "unit_price": 6.80, "total_price": 13.60 }
+          ],
+          "materials_cost": 49.06,
+          "material_markup_percentage": 10,
+          "travel_cost": 0,
+          "total_cost": 142.06,
+          "requires_approval": false,
+          "certification_verified": null,
+          "validation_notes": []
+        }
+      }
+    },
+    {
+      "title": "Messy input - missing information",
+      "description": "Worker gives vague description. Agent asks targeted follow-up questions.",
+      "messages": [
+        {
+          "role": "worker",
+          "content": "Pekka here. Did some work at the shopping center today. Fixed a heating issue on the third floor."
+        },
+        {
+          "role": "agent",
+          "content": "Hi Pekka. I can see you're at Kauppakeskus Pohjola for Nordic Property Services. A few things I need to complete the report:\n\n1. What exactly was the issue and what did you do? (e.g. heat pump repair, thermostat replacement, radiator work)\n2. How many hours did you work?\n3. Did you use any materials or replacement parts?"
+        },
+        {
+          "role": "worker",
+          "content": "It was one of the heat pumps, HP-2C wasn't cycling. I had to replace the expansion valve. Took about 2 and a half hours."
+        },
+        {
+          "role": "agent",
+          "content": "Thanks. Expansion valve replacement on heat pump HP-2C.\n\nA couple of things:\n\n1. Replacing an expansion valve typically requires recovering and recharging refrigerant. Did you top up refrigerant? If so, how much R-410A did you use?\n2. Did you replace any fittings (copper flare fittings)? That's common with this type of work.\n\nLooking at the last time this was done here (October 12th, WR-2025-002), Pekka used an expansion valve, 2kg of R-410A, and a copper flare fitting set."
+        },
+        {
+          "role": "worker",
+          "content": "Oh right yeah. Used about 1.5 kg of R-410A and yes new flare fittings."
+        },
+        {
+          "role": "agent",
+          "content": "Got it. Here's the summary:\n\nCustomer: Nordic Property Services\nSite: Kauppakeskus Pohjola\nCategory: HVAC\nWork: Expansion valve replacement on heat pump HP-2C. Recharged 1.5kg R-410A, replaced flare fittings.\nDate: 2026-03-20\nTime: 2.5 hours\n\nMaterials:\n- 1x Thermal Expansion Valve 3/8\"\n- 1.5kg Refrigerant R-410A\n- 1x Copper Flare Fitting Set\n\nYou have a valid Refrigerant Handling Certificate (Category I) - certification verified.\n\nLook correct?"
+        },
+        {
+          "role": "worker",
+          "content": "Yep, good to go."
+        },
+        {
+          "role": "agent",
+          "content": "Work log created. No issues flagged."
+        }
+      ],
+      "notes": "Agent handled vague initial input by asking grouped follow-up questions. Used work history and part associations to suggest likely missing materials (refrigerant, fittings). Referenced a specific historical record. Verified refrigerant handling certification.",
+      "work_log": {
+        "customer_id": "NPS-001",
+        "contract_id": "NPS-2025-FM01",
+        "site_id": "NPS-S1",
+        "worker_id": "W-001",
+        "date": "2026-03-20",
+        "service_category": "HVAC",
+        "work_type": "repair",
+        "description": "Replaced expansion valve on heat pump HP-2C (not cycling). Recharged 1.5kg R-410A, replaced copper flare fittings. System tested and operating normally.",
+        "hours_worked": 2.5,
+        "materials": [
+          { "part_id": "VLV-EXP-01", "name": "Thermal Expansion Valve 3/8\"", "quantity": 1, "unit_price": 85.00, "total_price": 85.00 },
+          { "part_id": "REF-R410A", "name": "Refrigerant R-410A (1kg)", "quantity": 1.5, "unit_price": 45.00, "total_price": 67.50 },
+          { "part_id": "FIT-FLARE-01", "name": "Copper Flare Fitting Set", "quantity": 1, "unit_price": 18.50, "total_price": 18.50 }
+        ],
+        "status": "complete",
+        "billable": true,
+        "billability_reasoning": "Standard HVAC repair within contract scope, performed during normal business hours. Worker holds required Refrigerant Handling Certificate (Category I).",
+        "compliance_flags": [],
+        "invoice_item": {
+          "customer_id": "NPS-001",
+          "contract_id": "NPS-2025-FM01",
+          "site_id": "NPS-S1",
+          "worker_id": "W-001",
+          "date": "2026-03-20",
+          "service_category": "HVAC",
+          "work_type": "repair",
+          "description": "Replaced expansion valve on heat pump HP-2C (not cycling). Recharged 1.5kg R-410A, replaced copper flare fittings. System tested and operating normally.",
+          "hours_worked": 2.5,
+          "rate_type": "normal",
+          "hourly_rate": 75.00,
+          "labor_cost": 187.50,
+          "materials": [
+            { "part_id": "VLV-EXP-01", "name": "Thermal Expansion Valve 3/8\"", "quantity": 1, "unit_price": 85.00, "total_price": 85.00 },
+            { "part_id": "REF-R410A", "name": "Refrigerant R-410A (1kg)", "quantity": 1.5, "unit_price": 45.00, "total_price": 67.50 },
+            { "part_id": "FIT-FLARE-01", "name": "Copper Flare Fitting Set", "quantity": 1, "unit_price": 18.50, "total_price": 18.50 }
+          ],
+          "materials_cost": 196.65,
+          "material_markup_percentage": 15,
+          "travel_cost": 0,
+          "total_cost": 384.15,
+          "requires_approval": false,
+          "certification_verified": true,
+          "validation_notes": []
+        }
+      }
+    },
+    {
+      "title": "Edge case - contract violation and cost limit",
+      "description": "Worker reports work that triggers multiple validation flags.",
+      "messages": [
+        {
+          "role": "worker",
+          "content": "Hi it's Janne. I was at Greenfield Secondary School this evening, around 6pm. The heating pump in the boiler room was making a terrible noise. I replaced it. Used a new circulation pump and some pipe fittings. About 4 hours of work."
+        },
+        {
+          "role": "agent",
+          "content": "Hi Janne. I need to flag a few things with this one:\n\n1. **Service hours**: The Greenfield Schools contract only covers work during business hours (Mon-Fri 08:00-16:00). You're reporting work at 18:00. There's no emergency or evening rate in this contract. Was this pre-approved by the facility manager Reijo Makinen?\n\n2. **Cost estimate**: 4 hours plus a circulation pump and fittings will likely push the total over the 500 EUR per-incident limit, which requires prior written approval from the facility manager.\n\n3. **Boiler replacement**: I want to confirm -- you said you replaced the heating pump. The contract covers 'Heating pump inspection' but also lists 'Boiler replacement' as excluded work. A circulation pump replacement should be covered under heating maintenance, but I want to make sure this wasn't a full boiler component.\n\nCan you clarify the approval situation and confirm what exactly was replaced?"
+        },
+        {
+          "role": "worker",
+          "content": "Reijo called me directly, said it was urgent and told me to come fix it. It's the circulation pump not the boiler. I used a new pump and two copper couplings and some thread tape."
+        },
+        {
+          "role": "agent",
+          "content": "Understood. Reijo authorized the work directly. I'll note that in the approval field.\n\nI don't have a circulation pump in our standard parts catalog. Can you give me the model/brand and what you paid for it?"
+        },
+        {
+          "role": "worker",
+          "content": "Grundfos UPS 25-60, cost me 185 euros from the supply shop."
+        },
+        {
+          "role": "agent",
+          "content": "Got it. Here's the summary:\n\nCustomer: City of Greenfield Schools\nSite: Greenfield Secondary School\nCategory: Heating\nWork: Emergency circulation pump replacement in boiler room. Old pump failing (noise). Replaced with Grundfos UPS 25-60.\nDate: 2026-03-20\nTime: 4.0 hours\n\nMaterials:\n- 1x Grundfos UPS 25-60 Circulation Pump [not in standard catalog]\n- 2x Copper Coupling 3/4\"\n- 1x PTFE Thread Seal Tape\n\nValidation notes:\n- Work performed outside contract service hours (18:00, contract covers 08:00-16:00). Verbal approval from facility manager Reijo Makinen.\n- Flagged due to out-of-hours work and proximity to the 500 EUR per-incident limit.\n\nDoes this look right?"
+        },
+        {
+          "role": "worker",
+          "content": "Yes that's correct."
+        },
+        {
+          "role": "agent",
+          "content": "Work log created with approval notes. I'd recommend getting written confirmation from Reijo about the out-of-hours authorization for your records."
+        }
+      ],
+      "notes": "Agent caught multiple issues: out-of-hours work, potential cost limit breach, and excluded work ambiguity. Handled a part not in the catalog gracefully. Added appropriate validation notes. Gave practical advice about documentation.",
+      "work_log": {
+        "customer_id": "GFS-001",
+        "contract_id": "GFS-2025-SM01",
+        "site_id": "GFS-S2",
+        "worker_id": "W-002",
+        "date": "2026-03-20",
+        "service_category": "Heating",
+        "work_type": "repair",
+        "description": "Emergency circulation pump replacement in boiler room. Old pump (Grundfos) failing with excessive noise. Replaced with new Grundfos UPS 25-60. Verbal authorization from facility manager Reijo Makinen for out-of-hours work.",
+        "hours_worked": 4.0,
+        "materials": [
+          { "part_id": "NON-CATALOG", "name": "Grundfos UPS 25-60 Circulation Pump", "source": "non-catalog", "quantity": 1, "unit_price": 185.00, "total_price": 185.00 },
+          { "part_id": "FIT-COP-01", "name": "Copper Coupling 3/4\"", "quantity": 2, "unit_price": 4.50, "total_price": 9.00 },
+          { "part_id": "SEAL-THREAD-01", "name": "PTFE Thread Seal Tape (10m roll)", "quantity": 1, "unit_price": 2.50, "total_price": 2.50 }
+        ],
+        "status": "pending_approval",
+        "billable": true,
+        "billability_reasoning": "Work is within Heating contract scope (circulation pump replacement). Requires facility manager approval due to out-of-hours work and non-catalog material per municipality procurement rules. Verbal authorization from Reijo Makinen noted.",
+        "compliance_flags": [
+          {
+            "type": "hours",
+            "severity": "warning",
+            "description": "Work performed outside contract service hours (18:00, contract covers Mon-Fri 08:00-16:00). GFS contract has no evening or emergency rate.",
+            "action_required": "Obtain written confirmation from facility manager Reijo Makinen for out-of-hours authorization."
+          },
+          {
+            "type": "scope",
+            "severity": "info",
+            "description": "Non-catalog material (Grundfos UPS 25-60 Circulation Pump, 185.00 EUR) requires facility manager approval per GFS municipality procurement rules.",
+            "action_required": "Facility manager approval required for non-catalog material purchase."
+          }
+        ],
+        "invoice_item": {
+          "customer_id": "GFS-001",
+          "contract_id": "GFS-2025-SM01",
+          "site_id": "GFS-S2",
+          "worker_id": "W-002",
+          "date": "2026-03-20",
+          "service_category": "Heating",
+          "work_type": "repair",
+          "description": "Emergency circulation pump replacement in boiler room. Old pump failing (noise). Replaced with Grundfos UPS 25-60. Verbal authorization from facility manager Reijo Makinen.",
+          "hours_worked": 4.0,
+          "rate_type": "normal",
+          "hourly_rate": 62.00,
+          "labor_cost": 248.00,
+          "materials": [
+            { "part_id": "NON-CATALOG", "name": "Grundfos UPS 25-60 Circulation Pump", "source": "non-catalog", "quantity": 1, "unit_price": 185.00, "total_price": 185.00 },
+            { "part_id": "FIT-COP-01", "name": "Copper Coupling 3/4\"", "quantity": 2, "unit_price": 4.50, "total_price": 9.00 },
+            { "part_id": "SEAL-THREAD-01", "name": "PTFE Thread Seal Tape (10m roll)", "quantity": 1, "unit_price": 2.50, "total_price": 2.50 }
+          ],
+          "materials_cost": 216.15,
+          "material_markup_percentage": 10,
+          "travel_cost": 0,
+          "total_cost": 464.15,
+          "requires_approval": true,
+          "approval_reason": "Work performed outside contract service hours. Non-catalog material (Grundfos UPS 25-60) requires facility manager approval per GFS procurement rules. Verbal authorization from Reijo Makinen noted.",
+          "certification_verified": null,
+          "validation_notes": [
+            "Work performed outside contract hours (18:00, contract covers 08:00-16:00). Verbal approval from facility manager.",
+            "Non-catalog material: Grundfos UPS 25-60 at supplier cost 185.00 EUR. Requires facility manager approval per municipality procurement rules."
+          ]
+        }
+      }
+    },
+    {
+      "title": "Edge case - certification problem",
+      "description": "Uncertified worker reports work requiring certification.",
+      "messages": [
+        {
+          "role": "worker",
+          "content": "Lauri here. I'm at FrostBite warehouse. Cold Storage B was running warm so I checked the refrigerant levels and topped up the system. Used about 3kg of R-449A. Took 2 hours."
+        },
+        {
+          "role": "agent",
+          "content": "Lauri, I need to stop you here. There's a certification issue.\n\nThe FrostBite Logistics contract requires a Refrigerant Handling Certificate (Category I or II) for any work involving refrigerant, per EU F-gas Regulation 517/2014. Looking at your profile, you don't currently hold this certification.\n\nI can't create a work log entry for this work as reported. The regulation states that uncertified workers may assist but must not handle refrigerant directly.\n\nOptions:\n1. If a certified technician was present and supervised the refrigerant handling, let me know who -- I can record the work under their supervision.\n2. If you performed this work alone, this needs to be escalated to your supervisor before logging.\n\nWhich applies here?"
+        },
+        {
+          "role": "worker",
+          "content": "Ah damn, I didn't think about that. Sanna was with me actually, she did the refrigerant part. I did the diagnostics and she handled the gas."
+        },
+        {
+          "role": "agent",
+          "content": "That works. Sanna Makela has a valid Refrigerant Handling Certificate (Category II), which covers this work.\n\nI'll record this with both of you. How should I split the hours? Were you both there for the full 2 hours?"
+        },
+        {
+          "role": "worker",
+          "content": "Yeah we were both there the whole time."
+        },
+        {
+          "role": "agent",
+          "content": "Got it. I'll create the work log entry with Sanna as the primary worker for certification compliance, with you assisting.\n\nCustomer: FrostBite Logistics\nSite: Turku Central Warehouse - Cold Storage B (+2C to +6C)\nCategory: Refrigeration\nWork: Refrigerant top-up on Cold Storage B cooling system. Diagnostics by Lauri Heikkinen, refrigerant handling by Sanna Makela (cert verified).\nDate: 2026-03-20\nTime: 2.0 hours x 2 workers = 4.0 hours total\n\nMaterials:\n- 3kg Refrigerant R-449A\n\nCertification: Verified (Sanna Makela, Category II)\n\nLook right?"
+        }
+      ],
+      "notes": "Agent correctly identified the certification violation, handled it firmly but helpfully, and found a compliant resolution. Noted the zone context (Cold Storage B is +2C, not freezer). Applied travel fee per FBL contract.",
+      "work_log": {
+        "customer_id": "FBL-001",
+        "contract_id": "FBL-2025-RC01",
+        "site_id": "FBL-S1",
+        "worker_id": "W-004",
+        "date": "2026-03-20",
+        "service_category": "Refrigeration",
+        "work_type": "repair",
+        "description": "Refrigerant top-up on Cold Storage B (+2C to +6C) cooling system. Temperature running warm. Diagnostics performed by Lauri Heikkinen (W-003). Refrigerant handling by Sanna Makela (W-004, Refrigerant Handling Certificate Category II). Topped up 3kg R-449A. System restored to operating temperature.",
+        "hours_worked": 4.0,
+        "materials": [
+          { "part_id": "REF-R449A", "name": "Refrigerant R-449A (1kg)", "quantity": 3, "unit_price": 52.00, "total_price": 156.00 }
+        ],
+        "status": "complete",
+        "billable": true,
+        "billability_reasoning": "Unscheduled refrigeration repair within contract scope. Certification requirement satisfied by Sanna Makela (Category II). Initial certification concern resolved -- Lauri Heikkinen assisted with diagnostics only, Sanna handled all refrigerant work.",
+        "compliance_flags": [
+          {
+            "type": "certification",
+            "severity": "info",
+            "description": "Initial certification concern resolved. Lauri Heikkinen (W-003, uncertified) performed diagnostics only. Sanna Makela (W-004, Refrigerant Handling Certificate Category II) handled all refrigerant work in compliance with EU F-gas Regulation 517/2014.",
+            "action_required": "None. Certification requirement satisfied."
+          }
+        ],
+        "invoice_item": {
+          "customer_id": "FBL-001",
+          "contract_id": "FBL-2025-RC01",
+          "site_id": "FBL-S1",
+          "worker_id": "W-004",
+          "date": "2026-03-20",
+          "service_category": "Refrigeration",
+          "work_type": "repair",
+          "description": "Refrigerant top-up on Cold Storage B cooling system. Diagnostics by Lauri Heikkinen (W-003), refrigerant handling by Sanna Makela (W-004, cert verified). 3kg R-449A added.",
+          "hours_worked": 4.0,
+          "rate_type": "normal",
+          "hourly_rate": 95.00,
+          "labor_cost": 380.00,
+          "materials": [
+            { "part_id": "REF-R449A", "name": "Refrigerant R-449A (1kg)", "quantity": 3, "unit_price": 52.00, "total_price": 156.00 }
+          ],
+          "materials_cost": 187.20,
+          "material_markup_percentage": 20,
+          "travel_cost": 45.00,
+          "total_cost": 612.20,
+          "requires_approval": false,
+          "certification_verified": true,
+          "validation_notes": [
+            "Diagnostics performed by Lauri Heikkinen (W-003). Refrigerant handling by Sanna Makela (W-004, Refrigerant Handling Certificate Category II)."
+          ]
+        }
+      }
+    },
+    {
+      "title": "Material suggestion from history",
+      "description": "Agent uses historical patterns to suggest materials the worker forgot to mention.",
+      "messages": [
+        {
+          "role": "worker",
+          "content": "Pekka. Monthly maintenance at FrostBite done. Checked everything, all good. Replaced the condenser filters. 7 hours today."
+        },
+        {
+          "role": "agent",
+          "content": "Hi Pekka. Monthly scheduled maintenance at FrostBite -- got it.\n\nBefore I finalize, looking at your previous visits:\n- October visit (WR-2025-004): you used 6x condenser filters and temperature calibration fluid\n- November visit (WR-2025-012): you used 6x condenser filters and 2x cold storage door seal kits\n\nYou've mentioned the condenser filters. A couple of questions:\n\n1. How many condenser filters did you use? (Previous visits used 6)\n2. Did you use temperature calibration fluid for the sensor calibration?\n3. Last month you noted Cold Storage A door seals were replaced. How are they holding up?"
+        },
+        {
+          "role": "worker",
+          "content": "6 filters yeah. Oh I forgot the calibration fluid, yes I used that too. Door seals look good."
+        },
+        {
+          "role": "agent",
+          "content": "Good, got the calibration fluid added.\n\nThis is a scheduled maintenance visit, so it's the fixed rate -- you're at 7 hours, within the 8 included.\n\nCustomer: FrostBite Logistics\nSite: Turku Central Warehouse\nCategory: Refrigeration\nWork type: Scheduled maintenance\nWork: Monthly system inspection. Replaced condenser filters, calibrated temperature sensors. All systems within spec. Cold Storage A door seals (replaced November) in good condition.\nDate: 2026-03-20\nTime: 7.0 hours (within 8h included)\n\nMaterials:\n- 6x Condenser Filter 600x300mm\n- 1x Temperature Sensor Calibration Fluid\n\nCertification: Verified (Pekka Virtanen, Category I)\n\nCorrect?"
+        }
+      ],
+      "notes": "Agent proactively reminded the worker about calibration fluid they had forgotten, using historical pattern matching. Also followed up on a previous recommendation (door seals). Applied the fixed scheduled pricing correctly.",
+      "work_log": {
+        "customer_id": "FBL-001",
+        "contract_id": "FBL-2025-RC01",
+        "site_id": "FBL-S1",
+        "worker_id": "W-001",
+        "date": "2026-03-20",
+        "service_category": "Refrigeration",
+        "work_type": "scheduled_maintenance",
+        "description": "Monthly scheduled maintenance visit. Full system inspection, replaced 6 condenser filters, calibrated temperature sensors. All systems within spec. Cold Storage A door seals (replaced November) in good condition.",
+        "hours_worked": 7.0,
+        "materials": [
+          { "part_id": "FLT-COND-01", "name": "Condenser Filter 600x300mm", "quantity": 6, "unit_price": 28.00, "total_price": 168.00 },
+          { "part_id": "CAL-TEMP-01", "name": "Temperature Sensor Calibration Fluid", "quantity": 1, "unit_price": 35.00, "total_price": 35.00 }
+        ],
+        "status": "complete",
+        "billable": true,
+        "billability_reasoning": "Monthly scheduled maintenance visit under FBL contract. Fixed price per visit. 7 hours worked, within the 8 included hours. All work within contract scope.",
+        "compliance_flags": [],
+        "invoice_item": {
+          "customer_id": "FBL-001",
+          "contract_id": "FBL-2025-RC01",
+          "site_id": "FBL-S1",
+          "worker_id": "W-001",
+          "date": "2026-03-20",
+          "service_category": "Refrigeration",
+          "work_type": "scheduled_maintenance",
+          "description": "Monthly scheduled maintenance. Full system inspection, replaced 6 condenser filters, calibrated temperature sensors. All systems within spec.",
+          "hours_worked": 7.0,
+          "rate_type": "scheduled",
+          "hourly_rate": 850.00,
+          "labor_cost": 850.00,
+          "materials": [
+            { "part_id": "FLT-COND-01", "name": "Condenser Filter 600x300mm", "quantity": 6, "unit_price": 28.00, "total_price": 168.00 },
+            { "part_id": "CAL-TEMP-01", "name": "Temperature Sensor Calibration Fluid", "quantity": 1, "unit_price": 35.00, "total_price": 35.00 }
+          ],
+          "materials_cost": 243.60,
+          "material_markup_percentage": 20,
+          "travel_cost": 45.00,
+          "total_cost": 1138.60,
+          "requires_approval": false,
+          "certification_verified": true,
+          "validation_notes": []
+        }
+      }
+    }
+  ]
+}

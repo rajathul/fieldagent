@@ -1,0 +1,422 @@
+{
+  "customers": [
+    {
+      "customer_id": "NPS-001",
+      "name": "Nordic Property Services Oy",
+      "billing_address": "Teollisuuskatu 15, 00510 Helsinki, Finland",
+      "business_id": "1234567-8",
+      "contact_person": {
+        "name": "Maria Virtanen",
+        "email": "maria.virtanen@nordicproperty.fi",
+        "phone": "+358 40 123 4567"
+      },
+      "contract": {
+        "contract_id": "NPS-2025-FM01",
+        "name": "Facility Maintenance Agreement 2025-2026",
+        "valid_from": "2025-01-01",
+        "valid_to": "2026-12-31",
+        "status": "active",
+        "sites": [
+          {
+            "site_id": "NPS-S1",
+            "name": "Kauppakeskus Pohjola (Shopping Center)",
+            "address": "Keskuskatu 8, 00100 Helsinki",
+            "access_instructions": "Service entrance via loading dock B. Security code: 4521#. Contact facility manager Jukka Lehtonen on arrival.",
+            "contact_person": {
+              "name": "Jukka Lehtonen",
+              "phone": "+358 50 234 5678"
+            }
+          },
+          {
+            "site_id": "NPS-S2",
+            "name": "Pohjola Business Park (Office Complex)",
+            "address": "Metsanneidonkuja 12, 02130 Espoo",
+            "access_instructions": "Main entrance. Sign in at reception. Elevator access card from security desk.",
+            "contact_person": {
+              "name": "Anna Korhonen",
+              "phone": "+358 45 345 6789"
+            }
+          },
+          {
+            "site_id": "NPS-S3",
+            "name": "Herttoniemi Warehouse",
+            "address": "Laivalahdenkatu 2a, 00880 Helsinki",
+            "access_instructions": "Gate code 7890. Park in service area. Keys in lockbox by main door (code: 1234).",
+            "contact_person": {
+              "name": "Jukka Lehtonen",
+              "phone": "+358 50 234 5678"
+            }
+          }
+        ],
+        "service_categories": [
+          {
+            "category": "HVAC",
+            "description": "Heating, ventilation, and air conditioning maintenance and repair",
+            "covered_work": [
+              "Preventive maintenance inspections",
+              "Filter replacements",
+              "Thermostat calibration and replacement",
+              "Ductwork inspection and minor repair",
+              "Heat pump servicing",
+              "Air handling unit maintenance",
+              "Compressor repair and replacement"
+            ]
+          },
+          {
+            "category": "Plumbing",
+            "description": "Plumbing maintenance and repair",
+            "covered_work": [
+              "Leak detection and repair",
+              "Faucet and valve replacement",
+              "Drain cleaning",
+              "Toilet and fixture repair",
+              "Pipe insulation",
+              "Water heater maintenance"
+            ]
+          },
+          {
+            "category": "Electrical",
+            "description": "Electrical maintenance and minor installations",
+            "covered_work": [
+              "Lighting maintenance and replacement",
+              "Outlet and switch repair",
+              "Electrical panel inspection",
+              "Emergency lighting testing",
+              "Minor electrical installations (under 16A)"
+            ],
+            "excluded_work": [
+              "High-voltage work (above 400V)",
+              "Major electrical installations",
+              "Fire alarm system modifications"
+            ]
+          }
+        ],
+        "pricing": {
+          "currency": "EUR",
+          "hourly_rates": {
+            "normal": {
+              "rate": 75.00,
+              "hours": "Mon-Fri 07:00-16:00"
+            },
+            "evening": {
+              "rate": 95.00,
+              "hours": "Mon-Fri 16:00-22:00"
+            },
+            "emergency": {
+              "rate": 120.00,
+              "hours": "Outside normal and evening hours, weekends, public holidays",
+              "minimum_charge_hours": 2
+            }
+          },
+          "material_markup_percentage": 15,
+          "non_catalog_materials": {
+            "policy": "Auto-approve under threshold, approval required above",
+            "auto_approve_limit_eur": 200,
+            "approval_required_from": "Site contact person",
+            "markup_applies": true,
+            "note": "Non-catalog materials under 200 EUR per item are accepted at supplier cost plus standard markup. Items over 200 EUR require approval from the site contact before use."
+          },
+          "travel_included": true,
+          "minimum_billing_increment_minutes": 30
+        },
+        "sla": {
+          "note": "Response time targets for work queue prioritization",
+          "critical": {
+            "description": "Safety hazard or complete system failure",
+            "response_time_hours": 4
+          },
+          "urgent": {
+            "description": "Significant impact on building operations",
+            "response_time_hours": 8
+          },
+          "normal": {
+            "description": "Standard maintenance and non-urgent repairs",
+            "response_time_hours": 48
+          }
+        },
+        "monthly_included_hours": {
+          "note": "Advanced feature: track cumulative hours against monthly allowance",
+          "hours": 40,
+          "overage_rate_multiplier": 1.25,
+          "applies_to": "normal rate hours only"
+        },
+        "terms": {
+          "payment_terms_days": 30,
+          "invoice_frequency": "monthly"
+        }
+      }
+    },
+    {
+      "customer_id": "FBL-001",
+      "name": "FrostBite Logistics Oy",
+      "billing_address": "Satamakatu 5, 20100 Turku, Finland",
+      "business_id": "2345678-9",
+      "contact_person": {
+        "name": "Tomas Eriksson",
+        "email": "tomas.eriksson@frostbite.fi",
+        "phone": "+358 40 456 7890"
+      },
+      "contract": {
+        "contract_id": "FBL-2025-RC01",
+        "name": "Refrigeration and Cold Chain Maintenance 2025",
+        "valid_from": "2025-03-01",
+        "valid_to": "2027-02-28",
+        "status": "active",
+        "sites": [
+          {
+            "site_id": "FBL-S1",
+            "name": "Turku Central Warehouse",
+            "address": "Satamakatu 5, 20100 Turku",
+            "access_instructions": "Report to warehouse office. Safety vest and steel-toe boots required in warehouse area. Forklift traffic - follow marked pedestrian paths.",
+            "contact_person": {
+              "name": "Mikko Salonen",
+              "phone": "+358 50 567 8901"
+            },
+            "zones": [
+              {
+                "zone_id": "FBL-Z1",
+                "name": "Cold Storage A (-22C)",
+                "description": "Frozen goods storage. Limit exposure to 30 minutes. Thermal gear required."
+              },
+              {
+                "zone_id": "FBL-Z2",
+                "name": "Cold Storage B (+2C to +6C)",
+                "description": "Fresh goods storage."
+              },
+              {
+                "zone_id": "FBL-Z3",
+                "name": "Loading Docks 1-6",
+                "description": "Temperature-controlled loading area."
+              }
+            ]
+          }
+        ],
+        "service_categories": [
+          {
+            "category": "Refrigeration",
+            "description": "Industrial refrigeration system maintenance and repair",
+            "covered_work": [
+              "Compressor maintenance and repair",
+              "Condenser and evaporator servicing",
+              "Refrigerant level checks and top-ups",
+              "Expansion valve maintenance",
+              "Defrost system inspection and repair",
+              "Temperature control calibration",
+              "Refrigerant leak detection and repair"
+            ],
+            "requirements": {
+              "refrigerant_handling": {
+                "certification_required": "Refrigerant Handling Certificate (Category I or II)",
+                "regulation": "EU F-gas Regulation 517/2014",
+                "note": "All work involving refrigerant must be performed by a certified technician. Uncertified workers may assist but must not handle refrigerant directly."
+              }
+            }
+          },
+          {
+            "category": "Dock Maintenance",
+            "description": "Loading dock door and equipment maintenance",
+            "covered_work": [
+              "Dock door mechanical repair",
+              "Dock leveler maintenance",
+              "Door seal replacement",
+              "Dock bumper replacement",
+              "Safety light and sensor maintenance"
+            ]
+          }
+        ],
+        "pricing": {
+          "currency": "EUR",
+          "scheduled_maintenance": {
+            "type": "fixed_price_per_visit",
+            "price": 850.00,
+            "frequency": "monthly",
+            "included_work": "Full system inspection, filter replacement, refrigerant level check, temperature calibration, defrost system test",
+            "included_hours": 8,
+            "additional_hours_rate": 90.00
+          },
+          "unscheduled_repairs": {
+            "hourly_rate": 95.00,
+            "hours": "Mon-Fri 06:00-18:00",
+            "emergency_rate": 145.00,
+            "emergency_hours": "Outside normal hours, weekends, public holidays",
+            "emergency_minimum_charge_hours": 3
+          },
+          "material_markup_percentage": 20,
+          "non_catalog_materials": {
+            "policy": "Accepted freely",
+            "markup_applies": true,
+            "note": "Specialized refrigeration and industrial parts are often not in standard catalogs. Non-catalog materials accepted at supplier cost plus standard markup. Worker must provide supplier price."
+          },
+          "travel_flat_fee": 45.00,
+          "travel_flat_fee_note": "Applied to all on-site visits. Covers travel to and from the Turku Central Warehouse.",
+          "minimum_billing_increment_minutes": 15
+        },
+        "sla": {
+          "note": "Cold chain interruption can cause significant product loss",
+          "critical": {
+            "description": "Temperature deviation in cold storage exceeding safe limits",
+            "response_time_hours": 2
+          },
+          "urgent": {
+            "description": "Equipment malfunction not yet affecting temperature",
+            "response_time_hours": 6
+          },
+          "normal": {
+            "description": "Dock equipment, non-critical repairs",
+            "response_time_hours": 24
+          }
+        },
+        "terms": {
+          "payment_terms_days": 14,
+          "invoice_frequency": "per_visit",
+          "penalty_clause": "Failure to respond within critical SLA may result in penalty of 500 EUR per incident"
+        }
+      }
+    },
+    {
+      "customer_id": "GFS-001",
+      "name": "City of Greenfield - School Facilities",
+      "billing_address": "Kunnantalo, Virastokatu 1, 30100 Greenfield, Finland",
+      "business_id": "0123456-7",
+      "contact_person": {
+        "name": "Sari Nieminen",
+        "email": "sari.nieminen@greenfield.fi",
+        "phone": "+358 40 678 9012"
+      },
+      "contract": {
+        "contract_id": "GFS-2025-SM01",
+        "name": "School Facility Maintenance 2025-2026",
+        "valid_from": "2025-08-01",
+        "valid_to": "2027-07-31",
+        "status": "active",
+        "sites": [
+          {
+            "site_id": "GFS-S1",
+            "name": "Greenfield Primary School",
+            "address": "Koulukatu 3, 30100 Greenfield",
+            "access_instructions": "Report to school office during school hours (08:00-15:00). Outside hours use side entrance, key from lockbox (code from facility manager).",
+            "contact_person": {
+              "name": "Reijo Makinen",
+              "phone": "+358 50 789 0123"
+            }
+          },
+          {
+            "site_id": "GFS-S2",
+            "name": "Greenfield Secondary School",
+            "address": "Opistokatu 7, 30100 Greenfield",
+            "access_instructions": "Main entrance. Sign in at janitor office, room 101.",
+            "contact_person": {
+              "name": "Reijo Makinen",
+              "phone": "+358 50 789 0123"
+            }
+          },
+          {
+            "site_id": "GFS-S3",
+            "name": "Greenfield Sports Hall",
+            "address": "Urheilukatu 12, 30100 Greenfield",
+            "access_instructions": "Service entrance on north side. Contact facility manager for access.",
+            "contact_person": {
+              "name": "Reijo Makinen",
+              "phone": "+358 50 789 0123"
+            }
+          }
+        ],
+        "service_categories": [
+          {
+            "category": "Heating",
+            "description": "Heating system maintenance",
+            "covered_work": [
+              "Radiator maintenance and bleeding",
+              "Heating pump inspection",
+              "Thermostat replacement",
+              "Heat distribution adjustments",
+              "Boiler room inspections"
+            ],
+            "excluded_work": [
+              "Boiler replacement",
+              "Heating system redesign",
+              "Underfloor heating installation"
+            ]
+          },
+          {
+            "category": "Ventilation",
+            "description": "Ventilation system maintenance",
+            "covered_work": [
+              "Filter replacements",
+              "Fan belt inspection and replacement",
+              "Duct cleaning coordination",
+              "Ventilation unit servicing",
+              "Air quality spot checks"
+            ]
+          },
+          {
+            "category": "Minor Plumbing",
+            "description": "Basic plumbing maintenance only",
+            "covered_work": [
+              "Faucet repair and replacement",
+              "Toilet repair",
+              "Drain cleaning (non-main lines)",
+              "Minor leak repair"
+            ],
+            "excluded_work": [
+              "Main line work",
+              "Sewer line repair",
+              "New fixture installations",
+              "Bathroom renovations"
+            ]
+          },
+          {
+            "category": "Minor Electrical",
+            "description": "Basic electrical maintenance only",
+            "covered_work": [
+              "Light fixture replacement",
+              "Outlet and switch replacement",
+              "Emergency exit light maintenance"
+            ],
+            "excluded_work": [
+              "Panel modifications",
+              "New circuit installations",
+              "Any work requiring electrical permit"
+            ]
+          }
+        ],
+        "pricing": {
+          "currency": "EUR",
+          "hourly_rates": {
+            "normal": {
+              "rate": 62.00,
+              "hours": "Mon-Fri 08:00-16:00"
+            }
+          },
+          "no_emergency_service": true,
+          "no_evening_or_weekend_service": true,
+          "service_hours_note": "All work must be performed during business hours (Mon-Fri 08:00-16:00). No emergency callout available under this contract.",
+          "material_markup_percentage": 10,
+          "non_catalog_materials": {
+            "policy": "Approval required for all non-catalog materials",
+            "approval_required_from": "Facility manager (Reijo Makinen)",
+            "markup_applies": true,
+            "note": "All non-catalog materials require prior approval from the facility manager before purchase or use. Municipality procurement rules apply."
+          },
+          "travel_included": true,
+          "minimum_billing_increment_minutes": 30
+        },
+        "cost_limits": {
+          "per_incident_limit_eur": 500,
+          "per_incident_note": "Any single repair estimated to exceed 500 EUR in total cost (labor + materials) requires prior written approval from the facility manager before work begins.",
+          "annual_budget_eur": 28000,
+          "annual_budget_note": "Advanced feature: total annual spend should not exceed budget without municipal approval"
+        },
+        "special_conditions": {
+          "school_hours": "Noisy or disruptive work should be scheduled outside school hours (08:00-15:00) when possible. Coordinate with facility manager.",
+          "summer_maintenance": "Major preventive maintenance should be scheduled during summer break (June 1 - August 10).",
+          "safety": "All workers must have valid safety training certificate. Background check required for regular site access."
+        },
+        "terms": {
+          "payment_terms_days": 21,
+          "invoice_frequency": "monthly"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,137 @@
+{
+  "instructions": "These are test prompts for validating your agent. For each test case, start a new conversation with the given worker_id and today's date (2026-03-25) as session context. Send the initial_message as the first worker input. The situation field describes what actually happened -- use it as ground truth when answering the agent's follow-up questions. The follow_up_hints tell you how to respond to specific questions the agent might ask.",
+  "test_cases": [
+    {
+      "id": "GS-01",
+      "title": "Baseline - clean repair report",
+      "difficulty": "easy",
+      "worker_id": "W-002",
+      "worker_name": "Janne Korhonen",
+      "initial_message": "Hi. I replaced 3 LED tube lights in the hallway at Greenfield Sports Hall today. Took about an hour. No other materials needed.",
+      "situation": "Janne replaced 3 LED tube lights (T8 type) in the hallway at Greenfield Sports Hall. The job took 1 hour. Used 3 lights from stock, no other materials. Straightforward job.",
+      "follow_up_hints": []
+    },
+    {
+      "id": "GS-02",
+      "title": "Missing materials - pipe repair without solder",
+      "difficulty": "medium",
+      "worker_id": "W-001",
+      "worker_name": "Pekka Virtanen",
+      "initial_message": "Fixed a leaking pipe at Herttoniemi Warehouse for Nordic Property. Cut out a bad section and put in new copper pipe and couplings. 1.5 hours, today.",
+      "situation": "Pekka fixed a leaking pipe at Herttoniemi Warehouse (Nordic Property Services). He cut out a corroded section and installed 1 meter of 3/4\" copper pipe with 2 copper couplings. He also used a solder and flux kit for the joints but forgot to mention it in his initial report. The job took 1.5 hours.",
+      "follow_up_hints": [
+        "If asked about soldering supplies, confirm you used a solder and flux kit (SOL-FLUX-01)",
+        "Pipe was 3/4\" copper, 1 meter section"
+      ]
+    },
+    {
+      "id": "GS-03",
+      "title": "Certification prevention - uncertified worker about to handle refrigerant",
+      "difficulty": "medium",
+      "worker_id": "W-003",
+      "worker_name": "Lauri Heikkinen",
+      "initial_message": "hey. im at frostbite warehouse. cold storage B seems to be running a bit warm, im thinking the refrigerant is low. im going to check the levels and top it up",
+      "situation": "Lauri is at FrostBite Logistics warehouse (Turku Central Warehouse). Cold Storage B is running warm and he suspects low refrigerant. He has NOT started the work yet -- he is reporting what he plans to do. He does not have a Refrigerant Handling Certificate.",
+      "follow_up_hints": [
+        "If told about the certification requirement, accept it and ask about getting a certified colleague instead"
+      ]
+    },
+    {
+      "id": "GS-04",
+      "title": "Cost limit - GFS repair exceeding 500 EUR",
+      "difficulty": "medium",
+      "worker_id": "W-002",
+      "worker_name": "Janne Korhonen",
+      "initial_message": "At Greenfield Primary. The circulation pump on the heating system is shot, I need to replace it. Got a new Grundfos pump for 280 euros from the supplier. Also need new ball valves and copper pipe to redo the connections. Probably 4 hours of work total.",
+      "situation": "Janne is at Greenfield Primary School. The heating system's circulation pump is broken. He sourced a replacement Grundfos pump from a supplier for 280 EUR. He also needs 2 ball valves (3/4\"), about 1 meter of copper pipe, and solder/flux. Estimated 4 hours. Work has NOT started yet.",
+      "follow_up_hints": [
+        "The pump is non-catalog, cost 280 EUR from supplier",
+        "If asked about approval for the cost or non-catalog materials, say you called Reijo Makinen and he approved it",
+        "Also need 2x ball valves, 1m copper pipe, and solder/flux kit"
+      ]
+    },
+    {
+      "id": "GS-05",
+      "title": "Duplicate prevention - monthly maintenance already done",
+      "difficulty": "hard",
+      "worker_id": "W-001",
+      "worker_name": "Pekka Virtanen",
+      "initial_message": "heading to the shopping center to do the monthly hvac check. should take about 5 hours, gonna replace all the filters as usual.",
+      "situation": "Pekka is heading to Kauppakeskus Pohjola (Nordic Property Services shopping center) to do the monthly HVAC maintenance. He has NOT started -- he is reporting in before heading out. He does not realize the March maintenance was already completed on March 10 (by him).",
+      "follow_up_hints": [
+        "If told March maintenance was already done, accept it and cancel the visit"
+      ]
+    },
+    {
+      "id": "GS-06",
+      "title": "Out-of-hours and excluded work at GFS",
+      "difficulty": "hard",
+      "worker_id": "W-002",
+      "worker_name": "Janne Korhonen",
+      "initial_message": "at greenfield secondary. saturday afternoon. the main sewer line is backed up, water on the floor in the basement. ive been here 3 hours trying to clear it. need to get a plumber in for the main line but ive managed to contain the flooding for now",
+      "situation": "Janne was called to Greenfield Secondary School on Saturday afternoon. The main sewer line was backed up with water on the basement floor. He spent 3 hours containing the flooding but did NOT fix the main sewer line -- that needs a specialist plumber. No special materials used. Saturday is outside GFS contract hours.",
+      "follow_up_hints": [
+        "The main sewer line work is outside Minor Plumbing scope -- you only contained the flooding",
+        "No materials used, just basic tools",
+        "Reijo Makinen (facility manager) called you in"
+      ]
+    },
+    {
+      "id": "GS-07",
+      "title": "FBL scheduled maintenance - hour overage",
+      "difficulty": "hard",
+      "worker_id": "W-001",
+      "worker_name": "Pekka Virtanen",
+      "initial_message": "finished the monthly at frostbite. took longer than usual, 10.5 hours. had to do extra work on the defrost system in cold storage A, one of the heater elements was failing. replaced it. also the usual filter swap and calibration. used 6 condenser filters, calibration fluid, and a defrost heater element (85 euros from supplier)",
+      "situation": "Pekka completed the monthly scheduled maintenance at FrostBite Logistics (Turku Central Warehouse). It took 10.5 hours instead of the usual 8. Extra time was spent on the defrost system in Cold Storage A -- a heater element was failing and he replaced it. Materials: 6x condenser filters, 1x temperature sensor calibration fluid, 1x defrost heater element (non-catalog, 85 EUR from supplier).",
+      "follow_up_hints": [
+        "The defrost heater element is non-catalog, cost 85 EUR from supplier",
+        "Standard maintenance plus the extra defrost repair pushed hours to 10.5"
+      ]
+    },
+    {
+      "id": "GS-08",
+      "title": "Vague input - everything missing",
+      "difficulty": "easy",
+      "worker_id": "W-004",
+      "worker_name": "Sanna Makela",
+      "initial_message": "fixed some lights today",
+      "situation": "Sanna replaced 4 LED panel lights (600x600mm, 40W) in the 2nd floor open office at Pohjola Business Park in Espoo for Nordic Property Services. The job took 2 hours. Used 4 LED panels from stock.",
+      "follow_up_hints": [
+        "If asked where: Pohjola Business Park, Espoo (NPS)",
+        "If asked what lights: 4 LED panel lights, 600x600mm",
+        "If asked how long: about 2 hours",
+        "If asked about materials: 4 LED panels from stock, nothing else"
+      ]
+    },
+    {
+      "id": "GS-09",
+      "title": "Emergency rate detection + non-catalog threshold",
+      "difficulty": "medium",
+      "worker_id": "W-001",
+      "worker_name": "Pekka Virtanen",
+      "initial_message": "Got called out to the shopping center last sunday at 11pm. One of the heat pumps on the roof was making a loud banging noise and the security guard called it in. Turned out the fan bearing was seized. I replaced the fan motor assembly. Used a replacement motor (320 EUR from emergency supplier) and new fan belt. Took about 3 hours including getting there.",
+      "situation": "Pekka was called out to Kauppakeskus Pohjola (NPS shopping center) last Sunday at 11pm. A heat pump fan bearing was seized. He replaced the fan motor assembly using a replacement motor from an emergency supplier (320 EUR) and a new V-Belt A38 fan belt from stock. Total 3 hours including travel.",
+      "follow_up_hints": [
+        "The replacement motor is non-catalog, 320 EUR from emergency supplier -- needs site contact approval (over 200 EUR NPS threshold)",
+        "Also used a Fan Belt V-Belt A38 (BLT-FAN-02) from catalog",
+        "Work was last Sunday at 11pm -- emergency rate applies"
+      ]
+    },
+    {
+      "id": "GS-10",
+      "title": "Compound scenario - multiple issues in one report",
+      "difficulty": "hard",
+      "worker_id": "W-003",
+      "worker_name": "Lauri Heikkinen",
+      "initial_message": "long day at greenfield primary school. did a bunch of stuff. replaced some ventilation filters, fixed a broken light switch in the teachers lounge, and also had a look at that main electrical panel because some breakers were tripping. spent about 5 hours total. oh and it was last saturday",
+      "situation": "Lauri had a long day at Greenfield Primary School last Saturday. He did three tasks: (1) Replaced 8 ventilation filters (G4 pre-filters, 592x592mm), about 3 hours. (2) Fixed a broken light switch in the teachers lounge, about 30 minutes, used a standard single light switch. (3) Inspected the main electrical panel because breakers were tripping -- just looked and reset breakers, did NOT modify anything, about 1.5 hours. Total 5 hours. Reijo Makinen knows he was there.",
+      "follow_up_hints": [
+        "If asked about the panel work: you only inspected and reset breakers, did not modify anything",
+        "If asked about Saturday: you didn't think it would be a problem, Reijo knew you were there",
+        "Time breakdown: 3h filters, 30min switch, 1.5h panel inspection",
+        "Filter type: 8x G4 pre-filters 592x592mm"
+      ]
+    }
+  ]
+}

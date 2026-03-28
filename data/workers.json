@@ -1,0 +1,90 @@
+{
+  "workers": [
+    {
+      "worker_id": "W-001",
+      "name": "Pekka Virtanen",
+      "role": "Senior Technician",
+      "phone": "+358 40 111 2222",
+      "certifications": [
+        {
+          "type": "Refrigerant Handling Certificate",
+          "category": "Category I",
+          "regulation": "EU F-gas Regulation 517/2014",
+          "valid_until": "2027-06-30"
+        },
+        {
+          "type": "Electrical Safety Certificate",
+          "class": "S2",
+          "valid_until": "2026-12-31"
+        },
+        {
+          "type": "Occupational Safety Card",
+          "valid_until": "2028-03-15"
+        },
+        {
+          "type": "Hot Work License",
+          "valid_until": "2026-09-30"
+        }
+      ],
+      "specializations": ["HVAC", "Refrigeration", "Heating"],
+      "assigned_customers": ["NPS-001", "FBL-001"]
+    },
+    {
+      "worker_id": "W-002",
+      "name": "Janne Korhonen",
+      "role": "Technician",
+      "phone": "+358 40 333 4444",
+      "certifications": [
+        {
+          "type": "Electrical Safety Certificate",
+          "class": "S2",
+          "valid_until": "2027-01-15"
+        },
+        {
+          "type": "Occupational Safety Card",
+          "valid_until": "2027-11-20"
+        }
+      ],
+      "specializations": ["Electrical", "Plumbing", "Minor Plumbing"],
+      "assigned_customers": ["NPS-001", "GFS-001"]
+    },
+    {
+      "worker_id": "W-003",
+      "name": "Lauri Heikkinen",
+      "role": "Junior Technician",
+      "phone": "+358 40 555 6666",
+      "certifications": [
+        {
+          "type": "Occupational Safety Card",
+          "valid_until": "2028-05-01"
+        }
+      ],
+      "specializations": ["Ventilation", "Dock Maintenance"],
+      "assigned_customers": ["NPS-001", "FBL-001", "GFS-001"]
+    },
+    {
+      "worker_id": "W-004",
+      "name": "Sanna Makela",
+      "role": "Technician",
+      "phone": "+358 40 777 8888",
+      "certifications": [
+        {
+          "type": "Refrigerant Handling Certificate",
+          "category": "Category II",
+          "regulation": "EU F-gas Regulation 517/2014",
+          "valid_until": "2026-08-15"
+        },
+        {
+          "type": "Occupational Safety Card",
+          "valid_until": "2027-02-28"
+        },
+        {
+          "type": "Hot Work License",
+          "valid_until": "2026-11-30"
+        }
+      ],
+      "specializations": ["Refrigeration", "HVAC", "Heating"],
+      "assigned_customers": ["FBL-001", "GFS-001", "NPS-001"]
+    }
+  ]
+}

@@ -1,0 +1,238 @@
+{
+  "work_records": [
+    {
+      "record_id": "WR-2025-001",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S1",
+      "worker_id": "W-001",
+      "date": "2025-10-05",
+      "category": "HVAC",
+      "work_type": "scheduled_maintenance",
+      "description": "Monthly HVAC inspection for shopping center. Checked all 4 rooftop air handling units. Replaced filters on AHU-1 and AHU-3. Calibrated thermostats in zones B and C. All systems operating within normal parameters.",
+      "hours_worked": 5.5,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "FLT-AHU-01", "name": "AHU Filter Panel 592x592x48mm", "quantity": 8, "unit_price": 12.50 },
+        { "part_id": "FLT-AHU-02", "name": "AHU Filter Panel 287x592x48mm", "quantity": 4, "unit_price": 9.80 }
+      ],
+      "invoice_total": 572.58,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-002",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S2",
+      "worker_id": "W-001",
+      "date": "2025-10-12",
+      "category": "HVAC",
+      "work_type": "repair",
+      "description": "Called in to investigate cold complaints in 3rd floor east wing. Found heat pump HP-3E not cycling properly. Faulty expansion valve. Replaced expansion valve and recharged refrigerant. Tested system - heating restored to normal.",
+      "hours_worked": 3.0,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "VLV-EXP-01", "name": "Thermal Expansion Valve 3/8\"", "quantity": 1, "unit_price": 85.00 },
+        { "part_id": "REF-R410A", "name": "Refrigerant R-410A (1kg)", "quantity": 2, "unit_price": 45.00 },
+        { "part_id": "FIT-FLARE-01", "name": "Copper Flare Fitting Set", "quantity": 1, "unit_price": 18.50 }
+      ],
+      "invoice_total": 447.53,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-003",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S1",
+      "worker_id": "W-002",
+      "date": "2025-10-15",
+      "category": "Electrical",
+      "work_type": "repair",
+      "description": "Emergency lighting test failed in parking garage level P2. Found 3 units with dead batteries, 1 unit with faulty charging circuit. Replaced batteries in 3 units, replaced entire fixture on unit with faulty circuit.",
+      "hours_worked": 2.5,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "BAT-EMRG-01", "name": "Emergency Light Battery Pack NiCd 3.6V", "quantity": 3, "unit_price": 22.00 },
+        { "part_id": "FIX-EMRG-01", "name": "Emergency Light Fixture LED 3W", "quantity": 1, "unit_price": 67.00 }
+      ],
+      "invoice_total": 340.45,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-004",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "worker_id": "W-001",
+      "date": "2025-10-01",
+      "category": "Refrigeration",
+      "work_type": "scheduled_maintenance",
+      "description": "Monthly scheduled maintenance visit. Full system inspection of Cold Storage A and B. Replaced condenser filters. Checked refrigerant levels - all within spec. Calibrated temperature sensors in zones A and B. Tested defrost cycles. Inspected door seals on Cold Storage A - showing some wear but still functional. Recommend replacement within 2 months.",
+      "hours_worked": 7.5,
+      "rate_type": "scheduled",
+      "materials_used": [
+        { "part_id": "FLT-COND-01", "name": "Condenser Filter 600x300mm", "quantity": 6, "unit_price": 28.00 },
+        { "part_id": "CAL-TEMP-01", "name": "Temperature Sensor Calibration Fluid", "quantity": 1, "unit_price": 35.00 }
+      ],
+      "invoice_total": 1138.60,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-005",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "worker_id": "W-004",
+      "date": "2025-10-18",
+      "category": "Refrigeration",
+      "work_type": "emergency_repair",
+      "description": "Emergency call - Cold Storage A temperature rising, alarm triggered at -15C (should be -22C). Found compressor C-A2 not running. Faulty contactor. Replaced contactor and run capacitor. Compressor restarted, temperature recovering. Remained on site to verify temperature reached -22C.",
+      "hours_worked": 4.0,
+      "rate_type": "emergency",
+      "materials_used": [
+        { "part_id": "ELC-CONT-01", "name": "Compressor Contactor 40A 3-pole", "quantity": 1, "unit_price": 55.00 },
+        { "part_id": "ELC-CAP-01", "name": "Run Capacitor 45uF 440V", "quantity": 1, "unit_price": 28.00 }
+      ],
+      "invoice_total": 724.60,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-006",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "worker_id": "W-003",
+      "date": "2025-10-20",
+      "category": "Dock Maintenance",
+      "work_type": "repair",
+      "description": "Dock door 3 not closing fully. Worn bottom seal and misaligned track roller. Replaced bottom seal and adjusted track. Door now closing and sealing properly.",
+      "hours_worked": 2.0,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "DOK-SEAL-01", "name": "Dock Door Bottom Seal 3m", "quantity": 1, "unit_price": 95.00 },
+        { "part_id": "DOK-ROLL-01", "name": "Track Roller Bearing Assembly", "quantity": 2, "unit_price": 32.00 }
+      ],
+      "invoice_total": 425.80,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-007",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S1",
+      "worker_id": "W-002",
+      "date": "2025-09-25",
+      "category": "Minor Plumbing",
+      "work_type": "repair",
+      "description": "Two toilets in boys restroom (2nd floor) running continuously. Replaced fill valves and flappers in both. Tested flush cycles - all working normally.",
+      "hours_worked": 1.5,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "PLB-FILL-01", "name": "Toilet Fill Valve Universal", "quantity": 2, "unit_price": 15.50 },
+        { "part_id": "PLB-FLAP-01", "name": "Toilet Flapper Valve 2\"", "quantity": 2, "unit_price": 6.80 }
+      ],
+      "invoice_total": 142.06,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-008",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S2",
+      "worker_id": "W-002",
+      "date": "2025-10-10",
+      "category": "Heating",
+      "work_type": "repair",
+      "description": "Classrooms 201-204 cold. Found air in radiator circuits. Bled all radiators in 2nd floor east wing (12 units). Checked circulation pump - running but pressure low. Topped up system pressure from 0.8 bar to 1.5 bar. All radiators heating evenly after bleeding.",
+      "hours_worked": 2.5,
+      "rate_type": "normal",
+      "materials_used": [],
+      "invoice_total": 155.00,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-009",
+      "customer_id": "GFS-001",
+      "site_id": "GFS-S3",
+      "worker_id": "W-002",
+      "date": "2025-10-14",
+      "category": "Ventilation",
+      "work_type": "scheduled_maintenance",
+      "description": "Quarterly ventilation maintenance. Replaced filters in all 3 AHUs. Checked fan belts - replaced belt on AHU-2 (showing cracking). Measured airflows - all within spec. Cleaned supply air grilles in main hall.",
+      "hours_worked": 4.0,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "FLT-VENT-01", "name": "Ventilation Filter G4 592x592x48mm", "quantity": 12, "unit_price": 8.50 },
+        { "part_id": "FLT-VENT-02", "name": "Ventilation Filter F7 592x592x48mm", "quantity": 6, "unit_price": 18.00 },
+        { "part_id": "BLT-FAN-01", "name": "Fan Belt V-Belt A42", "quantity": 1, "unit_price": 14.00 }
+      ],
+      "invoice_total": 494.40,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-010",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S3",
+      "worker_id": "W-002",
+      "date": "2025-10-22",
+      "category": "Plumbing",
+      "work_type": "repair",
+      "description": "Water leak reported in loading area. Found corroded pipe joint on 3/4\" cold water line. Cut out damaged section and replaced with new copper section. Soldered joints and tested - no leaks.",
+      "hours_worked": 2.0,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "PIP-COP-01", "name": "Copper Pipe 3/4\" (1m section)", "quantity": 1, "unit_price": 22.00 },
+        { "part_id": "FIT-COP-01", "name": "Copper Coupling 3/4\"", "quantity": 2, "unit_price": 4.50 },
+        { "part_id": "SOL-FLUX-01", "name": "Soldering Flux and Solder Kit", "quantity": 1, "unit_price": 12.00 }
+      ],
+      "invoice_total": 199.45,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-011",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S1",
+      "worker_id": "W-001",
+      "date": "2025-11-05",
+      "category": "HVAC",
+      "work_type": "scheduled_maintenance",
+      "description": "Monthly HVAC inspection. Checked all 4 rooftop AHUs. Replaced filters on AHU-2 and AHU-4 this month. AHU-1 and AHU-3 were done last month - still clean. Thermostat in zone A reading 2 degrees high, recalibrated. All systems normal.",
+      "hours_worked": 4.5,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "FLT-AHU-01", "name": "AHU Filter Panel 592x592x48mm", "quantity": 8, "unit_price": 12.50 },
+        { "part_id": "FLT-AHU-02", "name": "AHU Filter Panel 287x592x48mm", "quantity": 4, "unit_price": 9.80 }
+      ],
+      "invoice_total": 497.58,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2025-012",
+      "customer_id": "FBL-001",
+      "site_id": "FBL-S1",
+      "worker_id": "W-001",
+      "date": "2025-11-01",
+      "category": "Refrigeration",
+      "work_type": "scheduled_maintenance",
+      "description": "Monthly scheduled maintenance. Full inspection. Replaced condenser filters. Refrigerant levels OK in all circuits. Door seals on Cold Storage A now clearly worn - replaced both door seals as recommended last month. All temperatures stable.",
+      "hours_worked": 8.0,
+      "rate_type": "scheduled",
+      "materials_used": [
+        { "part_id": "FLT-COND-01", "name": "Condenser Filter 600x300mm", "quantity": 6, "unit_price": 28.00 },
+        { "part_id": "SEAL-DOOR-01", "name": "Cold Storage Door Seal Kit (-25C rated)", "quantity": 2, "unit_price": 120.00 }
+      ],
+      "invoice_total": 1384.60,
+      "status": "invoiced"
+    },
+    {
+      "record_id": "WR-2026-001",
+      "customer_id": "NPS-001",
+      "site_id": "NPS-S1",
+      "worker_id": "W-001",
+      "date": "2026-03-10",
+      "category": "HVAC",
+      "work_type": "scheduled_maintenance",
+      "description": "Monthly HVAC inspection for shopping center. Checked all 4 rooftop AHUs. Replaced filters on AHU-2 and AHU-4. AHU-1 belt showing slight wear, noted for next visit. All systems operating normally.",
+      "hours_worked": 5.0,
+      "rate_type": "normal",
+      "materials_used": [
+        { "part_id": "FLT-AHU-01", "name": "AHU Filter Panel 592x592x48mm", "quantity": 8, "unit_price": 12.50 },
+        { "part_id": "FLT-AHU-02", "name": "AHU Filter Panel 287x592x48mm", "quantity": 4, "unit_price": 9.80 }
+      ],
+      "invoice_total": 535.08,
+      "status": "invoiced"
+    }
+  ]
+}

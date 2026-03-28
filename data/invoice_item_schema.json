@@ -1,0 +1,189 @@
+{
+  "description": "Schema for a completed invoice line item. The agent should produce output conforming to this structure.",
+  "schema": {
+    "type": "object",
+    "required": [
+      "customer_id",
+      "contract_id",
+      "site_id",
+      "worker_id",
+      "date",
+      "service_category",
+      "work_type",
+      "description",
+      "hours_worked",
+      "rate_type",
+      "hourly_rate",
+      "labor_cost",
+      "materials",
+      "materials_cost",
+      "travel_cost",
+      "total_cost",
+      "requires_approval",
+      "validation_notes"
+    ],
+    "properties": {
+      "customer_id": {
+        "type": "string",
+        "description": "Customer identifier from contracts.json (e.g. NPS-001)"
+      },
+      "contract_id": {
+        "type": "string",
+        "description": "Contract identifier (e.g. NPS-2025-FM01)"
+      },
+      "site_id": {
+        "type": "string",
+        "description": "Site identifier where work was performed (e.g. NPS-S1)"
+      },
+      "worker_id": {
+        "type": "string",
+        "description": "Worker identifier from workers.json (e.g. W-001)"
+      },
+      "date": {
+        "type": "string",
+        "format": "date",
+        "description": "Date work was performed (YYYY-MM-DD)"
+      },
+      "service_category": {
+        "type": "string",
+        "description": "Service category from the contract (e.g. HVAC, Plumbing, Refrigeration)"
+      },
+      "work_type": {
+        "type": "string",
+        "enum": ["scheduled_maintenance", "repair", "emergency_repair"],
+        "description": "Type of work performed"
+      },
+      "description": {
+        "type": "string",
+        "description": "Clear description of work performed, suitable for the invoice"
+      },
+      "hours_worked": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Total hours worked, in increments matching the contract's minimum billing increment"
+      },
+      "rate_type": {
+        "type": "string",
+        "enum": ["normal", "evening", "emergency", "scheduled"],
+        "description": "Which rate tier applies based on when the work was done"
+      },
+      "hourly_rate": {
+        "type": "number",
+        "description": "Hourly rate applied, from the contract pricing"
+      },
+      "labor_cost": {
+        "type": "number",
+        "description": "hours_worked * hourly_rate. For scheduled maintenance (FBL), use the fixed visit price for included hours."
+      },
+      "materials": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["part_id", "name", "quantity", "unit_price", "total_price"],
+          "properties": {
+            "part_id": {
+              "type": "string",
+              "description": "Part identifier from parts_catalog.json"
+            },
+            "name": {
+              "type": "string",
+              "description": "Part name"
+            },
+            "quantity": {
+              "type": "number",
+              "minimum": 1
+            },
+            "unit_price": {
+              "type": "number",
+              "description": "Unit price from parts_catalog.json"
+            },
+            "total_price": {
+              "type": "number",
+              "description": "quantity * unit_price"
+            }
+          }
+        },
+        "description": "List of materials used. Empty array if no materials."
+      },
+      "materials_cost": {
+        "type": "number",
+        "description": "Sum of all material total_prices, WITH the contract's markup percentage applied"
+      },
+      "material_markup_percentage": {
+        "type": "number",
+        "description": "The markup percentage from the contract (e.g. 15, 20, 10)"
+      },
+      "travel_cost": {
+        "type": "number",
+        "description": "Travel cost. 0 if travel is included in the contract, flat fee if specified (e.g. FBL 45 EUR)"
+      },
+      "total_cost": {
+        "type": "number",
+        "description": "labor_cost + materials_cost (with markup) + travel_cost"
+      },
+      "requires_approval": {
+        "type": "boolean",
+        "description": "True if the invoice item exceeds a contract cost limit (e.g. GFS 500 EUR per-incident limit)"
+      },
+      "approval_reason": {
+        "type": "string",
+        "description": "Reason approval is required. Only present if requires_approval is true."
+      },
+      "certification_verified": {
+        "type": "boolean",
+        "description": "True if the work required certification and the worker holds it. Null if no certification required."
+      },
+      "validation_notes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        },
+        "description": "Any warnings, flags, or notes from validation. E.g. 'Work performed outside contract service hours', 'Monthly maintenance already completed for this period'. Empty array if no issues."
+      }
+    }
+  },
+  "example": {
+    "customer_id": "NPS-001",
+    "contract_id": "NPS-2025-FM01",
+    "site_id": "NPS-S2",
+    "worker_id": "W-001",
+    "date": "2025-10-12",
+    "service_category": "HVAC",
+    "work_type": "repair",
+    "description": "Heat pump HP-3E not heating. Found faulty expansion valve. Replaced expansion valve, recharged refrigerant R-410A (2kg). System tested and operating normally.",
+    "hours_worked": 3.0,
+    "rate_type": "normal",
+    "hourly_rate": 75.00,
+    "labor_cost": 225.00,
+    "materials": [
+      {
+        "part_id": "VLV-EXP-01",
+        "name": "Thermal Expansion Valve 3/8\"",
+        "quantity": 1,
+        "unit_price": 85.00,
+        "total_price": 85.00
+      },
+      {
+        "part_id": "REF-R410A",
+        "name": "Refrigerant R-410A (1kg)",
+        "quantity": 2,
+        "unit_price": 45.00,
+        "total_price": 90.00
+      },
+      {
+        "part_id": "FIT-FLARE-01",
+        "name": "Copper Flare Fitting Set",
+        "quantity": 1,
+        "unit_price": 18.50,
+        "total_price": 18.50
+      }
+    ],
+    "materials_cost": 222.53,
+    "material_markup_percentage": 15,
+    "travel_cost": 0,
+    "total_cost": 447.53,
+    "requires_approval": false,
+    "certification_verified": true,
+    "validation_notes": []
+  }
+}

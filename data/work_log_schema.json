@@ -1,0 +1,224 @@
+{
+  "description": "Schema for a work log entry. The agent should ALWAYS produce a work log entry for every reported or planned task. If the work is billable, the entry includes an invoice_item. If not, the entry documents why and what action was taken.",
+  "schema": {
+    "type": "object",
+    "required": [
+      "customer_id",
+      "contract_id",
+      "site_id",
+      "worker_id",
+      "date",
+      "service_category",
+      "work_type",
+      "description",
+      "hours_worked",
+      "materials",
+      "status",
+      "billable",
+      "billability_reasoning",
+      "compliance_flags",
+      "invoice_item"
+    ],
+    "properties": {
+      "customer_id": {
+        "type": "string",
+        "description": "Customer identifier from contracts.json"
+      },
+      "contract_id": {
+        "type": "string",
+        "description": "Contract identifier"
+      },
+      "site_id": {
+        "type": "string",
+        "description": "Site identifier where work was performed or planned"
+      },
+      "worker_id": {
+        "type": "string",
+        "description": "Worker identifier from workers.json"
+      },
+      "date": {
+        "type": "string",
+        "format": "date",
+        "description": "Date work was performed or is planned (YYYY-MM-DD)"
+      },
+      "service_category": {
+        "type": "string",
+        "description": "Service category from the contract"
+      },
+      "work_type": {
+        "type": "string",
+        "enum": ["scheduled_maintenance", "repair", "emergency_repair"],
+        "description": "Type of work"
+      },
+      "description": {
+        "type": "string",
+        "description": "Description of work performed or planned"
+      },
+      "hours_worked": {
+        "type": "number",
+        "minimum": 0,
+        "description": "Actual hours worked. 0 if work was prevented before starting."
+      },
+      "materials": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["part_id", "name", "quantity", "unit_price", "total_price"],
+          "properties": {
+            "part_id": {
+              "type": "string",
+              "description": "Part identifier from parts_catalog.json, or 'NON-CATALOG' for supplier-sourced parts"
+            },
+            "name": { "type": "string" },
+            "quantity": { "type": "number", "minimum": 0 },
+            "unit_price": { "type": "number" },
+            "total_price": { "type": "number" }
+          }
+        },
+        "description": "Materials used or that would have been used. Empty array if none."
+      },
+      "status": {
+        "type": "string",
+        "enum": ["complete", "prevented", "pending_approval", "pending_review"],
+        "description": "complete: work done and logged. prevented: agent stopped the worker before work began. pending_approval: work requires approval before or after. pending_review: compliance or other issue needs management review."
+      },
+      "billable": {
+        "type": "boolean",
+        "description": "Whether this work should be billed to the customer"
+      },
+      "billability_reasoning": {
+        "type": "string",
+        "description": "Explanation of why this work is or is not billable. Always populated."
+      },
+      "compliance_flags": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "required": ["type", "severity", "description"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["certification", "scope", "hours", "duplicate", "cost_limit", "safety"],
+              "description": "Category of compliance issue"
+            },
+            "severity": {
+              "type": "string",
+              "enum": ["info", "warning", "critical"],
+              "description": "info: worth noting. warning: needs attention. critical: blocks billing or requires immediate escalation."
+            },
+            "description": {
+              "type": "string",
+              "description": "Clear description of the issue"
+            },
+            "action_required": {
+              "type": "string",
+              "description": "What needs to happen to resolve this (e.g. 'Escalate to supervisor', 'Get approval from facility manager')"
+            }
+          }
+        },
+        "description": "Any compliance issues detected. Empty array if none."
+      },
+      "invoice_item": {
+        "type": ["object", "null"],
+        "description": "The invoice line item if billable, null if not billable or if blocked by compliance issues. Schema matches invoice_item_schema.json."
+      }
+    }
+  },
+  "examples": [
+    {
+      "_title": "Normal billable work",
+      "customer_id": "GFS-001",
+      "contract_id": "GFS-2025-SM01",
+      "site_id": "GFS-S3",
+      "worker_id": "W-002",
+      "date": "2025-11-20",
+      "service_category": "Minor Electrical",
+      "work_type": "repair",
+      "description": "Replaced 3 LED tube lights in hallway.",
+      "hours_worked": 1.0,
+      "materials": [
+        { "part_id": "FIX-LED-02", "name": "LED Tube T8 1200mm 18W", "quantity": 3, "unit_price": 8.50, "total_price": 25.50 }
+      ],
+      "status": "complete",
+      "billable": true,
+      "billability_reasoning": "Standard repair work within contract scope, within cost limits, performed during business hours.",
+      "compliance_flags": [],
+      "invoice_item": {
+        "customer_id": "GFS-001",
+        "contract_id": "GFS-2025-SM01",
+        "site_id": "GFS-S3",
+        "worker_id": "W-002",
+        "date": "2025-11-20",
+        "service_category": "Minor Electrical",
+        "work_type": "repair",
+        "description": "Replaced 3 LED tube lights in hallway.",
+        "hours_worked": 1.0,
+        "rate_type": "normal",
+        "hourly_rate": 62.00,
+        "labor_cost": 62.00,
+        "materials": [
+          { "part_id": "FIX-LED-02", "name": "LED Tube T8 1200mm 18W", "quantity": 3, "unit_price": 8.50, "total_price": 25.50 }
+        ],
+        "materials_cost": 28.05,
+        "material_markup_percentage": 10,
+        "travel_cost": 0,
+        "total_cost": 90.05,
+        "requires_approval": false,
+        "certification_verified": null,
+        "validation_notes": []
+      }
+    },
+    {
+      "_title": "Work prevented -- duplicate detected",
+      "customer_id": "FBL-001",
+      "contract_id": "FBL-2025-RC01",
+      "site_id": "FBL-S1",
+      "worker_id": "W-003",
+      "date": "2025-11-15",
+      "service_category": "Refrigeration",
+      "work_type": "scheduled_maintenance",
+      "description": "Worker planned to perform monthly scheduled maintenance. Agent detected this month's maintenance was already completed on 2025-11-01 by W-001 (Pekka Virtanen).",
+      "hours_worked": 0,
+      "materials": [],
+      "status": "prevented",
+      "billable": false,
+      "billability_reasoning": "Duplicate scheduled maintenance. November monthly visit already completed on 2025-11-01 (WR-2025-012). Work prevented before starting.",
+      "compliance_flags": [
+        {
+          "type": "duplicate",
+          "severity": "warning",
+          "description": "November scheduled maintenance already completed on 2025-11-01 by Pekka Virtanen (WR-2025-012).",
+          "action_required": "None. Worker was informed and work was not started."
+        }
+      ],
+      "invoice_item": null
+    },
+    {
+      "_title": "Compliance issue -- uncertified work already performed",
+      "customer_id": "FBL-001",
+      "contract_id": "FBL-2025-RC01",
+      "site_id": "FBL-S1",
+      "worker_id": "W-003",
+      "date": "2025-11-18",
+      "service_category": "Refrigeration",
+      "work_type": "repair",
+      "description": "Worker topped up refrigerant R-449A (2kg) in Cold Storage B without required certification. Work already completed at time of reporting.",
+      "hours_worked": 1.5,
+      "materials": [
+        { "part_id": "REF-R449A", "name": "Refrigerant R-449A (1kg)", "quantity": 2, "unit_price": 52.00, "total_price": 104.00 }
+      ],
+      "status": "pending_review",
+      "billable": false,
+      "billability_reasoning": "Work performed in violation of contract certification requirements (EU F-gas Regulation 517/2014). Billing suspended pending management review of compliance incident.",
+      "compliance_flags": [
+        {
+          "type": "certification",
+          "severity": "critical",
+          "description": "Worker W-003 (Lauri Heikkinen) does not hold a Refrigerant Handling Certificate. FBL contract requires Category I or II certification for all refrigerant work.",
+          "action_required": "Escalate to supervisor. Management must review compliance incident before any billing decision."
+        }
+      ],
+      "invoice_item": null
+    }
+  ]
+}
