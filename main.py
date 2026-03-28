@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse, FileResponse
+from livekit.api import AccessToken, VideoGrants
 
 load_dotenv()
 
@@ -169,6 +170,27 @@ async def sse_stream():
             "X-Accel-Buffering": "no",
         },
     )
+
+
+@app.get("/livekit-token")
+def get_livekit_token(session_id: str, worker_id: str, date: str):
+    lk_url = os.getenv("LIVEKIT_URL")
+    lk_key = os.getenv("LIVEKIT_API_KEY")
+    lk_secret = os.getenv("LIVEKIT_API_SECRET")
+    if not all([lk_url, lk_key, lk_secret]):
+        raise HTTPException(status_code=500, detail="LiveKit env vars not configured")
+
+    room_name = f"fieldagent-{session_id}"
+    metadata = json.dumps({"worker_id": worker_id, "date": date, "session_id": session_id})
+    token = (
+        AccessToken(lk_key, lk_secret)
+        .with_identity(worker_id)
+        .with_name(worker_id)
+        .with_metadata(metadata)
+        .with_grants(VideoGrants(room_join=True, room=room_name))
+        .to_jwt()
+    )
+    return {"token": token, "room": room_name, "url": lk_url}
 
 
 @app.get("/health")

@@ -6,6 +6,7 @@
 <title>FieldAgent — Work Reporting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
 <style>
   :root {
     --bg: #0e1117;
@@ -525,6 +526,73 @@
 
   .send-btn svg { width: 16px; height: 16px; }
 
+  /* ── Mic button ── */
+  .mic-btn {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.1s;
+    flex-shrink: 0;
+  }
+
+  .mic-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .mic-btn.recording {
+    background: rgba(255,95,95,0.15);
+    border-color: var(--danger);
+    color: var(--danger);
+    animation: mic-pulse 1.4s ease-in-out infinite;
+  }
+
+  .mic-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+  .mic-btn svg { width: 16px; height: 16px; }
+
+  @keyframes mic-pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(255,95,95,0.4); }
+    50%       { box-shadow: 0 0 0 6px rgba(255,95,95,0); }
+  }
+
+  /* ── Voice wave (shown inside input-wrap while recording) ── */
+  .voice-wave {
+    display: none;
+    align-items: center;
+    gap: 3px;
+    padding: 0 4px;
+    height: 22px;
+    flex-shrink: 0;
+  }
+
+  .voice-wave.active { display: flex; }
+
+  .voice-wave .bar {
+    width: 3px;
+    border-radius: 2px;
+    background: var(--danger);
+    animation: wave-bar 0.9s ease-in-out infinite;
+    transform-origin: bottom;
+  }
+
+  .voice-wave .bar:nth-child(1) { height: 6px;  animation-delay: 0s; }
+  .voice-wave .bar:nth-child(2) { height: 14px; animation-delay: 0.12s; }
+  .voice-wave .bar:nth-child(3) { height: 20px; animation-delay: 0.24s; }
+  .voice-wave .bar:nth-child(4) { height: 14px; animation-delay: 0.36s; }
+  .voice-wave .bar:nth-child(5) { height: 8px;  animation-delay: 0.48s; }
+  .voice-wave .bar:nth-child(6) { height: 18px; animation-delay: 0.18s; }
+  .voice-wave .bar:nth-child(7) { height: 10px; animation-delay: 0.30s; }
+
+  @keyframes wave-bar {
+    0%, 100% { transform: scaleY(0.3); opacity: 0.6; }
+    50%       { transform: scaleY(1);   opacity: 1; }
+  }
+
   /* ── Status bar ── */
   .status-bar {
     padding: 5px 20px;
@@ -584,6 +652,11 @@
 
     <div class="input-bar">
       <div class="input-wrap">
+        <div class="voice-wave" id="voiceWave">
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div>
+        </div>
         <textarea
           id="msgInput"
           placeholder="Describe what you did or what you're about to do..."
@@ -593,6 +666,14 @@
           disabled
         ></textarea>
       </div>
+      <button class="mic-btn" id="micBtn" onclick="toggleMic()" disabled title="Voice input">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="9" y="2" width="6" height="11" rx="3"></rect>
+          <path d="M5 10a7 7 0 0 0 14 0"></path>
+          <line x1="12" y1="19" x2="12" y2="22"></line>
+          <line x1="8" y1="22" x2="16" y2="22"></line>
+        </svg>
+      </button>
       <button class="send-btn" id="sendBtn" onclick="sendMessage()" disabled>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
           <line x1="22" y1="2" x2="11" y2="13"></line>
@@ -618,6 +699,8 @@
 <script>
 const API = window.location.origin;
 let sessionId = null;
+let currentWorkerId = null;
+let currentDate = null;
 let isLoading = false;
 
 // ── Session ──────────────────────────────────────────────────
@@ -636,11 +719,14 @@ async function startSession() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     sessionId = data.session_id;
+    currentWorkerId = workerId;
+    currentDate = date;
 
     document.getElementById('sessionInfo').textContent =
       `${data.worker_name} · ${date} · ${sessionId.slice(0, 8)}`;
     document.getElementById('msgInput').disabled = false;
     document.getElementById('sendBtn').disabled = false;
+    document.getElementById('micBtn').disabled = false;
     document.getElementById('msgInput').focus();
 
     clearMessages();
@@ -793,6 +879,7 @@ function setLoading(v) {
   isLoading = v;
   document.getElementById('sendBtn').disabled = v;
   document.getElementById('msgInput').disabled = v;
+  document.getElementById('micBtn').disabled = v || !sessionId;
   if (!v) document.getElementById('msgInput').focus();
 }
 
@@ -912,6 +999,67 @@ function toggleJson(el) {
   const open = pre.style.display === 'block';
   pre.style.display = open ? 'none' : 'block';
   el.textContent = open ? '▶ view raw json' : '▼ hide raw json';
+}
+
+// ── Voice / Mic (LiveKit) ────────────────────────────────────
+let livekitRoom = null;
+let isRecording = false;
+
+async function toggleMic() {
+  if (isRecording) {
+    isRecording = false;
+    stopMicUI();
+    if (livekitRoom) { await livekitRoom.disconnect(); livekitRoom = null; }
+  } else {
+    setStatus('connecting voice…');
+    try {
+      const res = await fetch(
+        `${API}/livekit-token?session_id=${sessionId}&worker_id=${encodeURIComponent(currentWorkerId)}&date=${encodeURIComponent(currentDate)}`
+      );
+      if (!res.ok) throw new Error(`token error ${res.status}`);
+      const { token, url } = await res.json();
+
+      livekitRoom = new LivekitClient.Room();
+
+      livekitRoom.on(LivekitClient.RoomEvent.TrackSubscribed, (track) => {
+        if (track.kind === LivekitClient.Track.Kind.Audio) {
+          const el = track.attach();
+          el.id = 'lk-agent-audio';
+          document.body.appendChild(el);
+        }
+      });
+
+      livekitRoom.on(LivekitClient.RoomEvent.TrackUnsubscribed, (track) => {
+        track.detach().forEach(el => el.remove());
+      });
+
+      livekitRoom.on(LivekitClient.RoomEvent.Disconnected, () => {
+        isRecording = false;
+        stopMicUI();
+        const el = document.getElementById('lk-agent-audio');
+        if (el) el.remove();
+      });
+
+      await livekitRoom.connect(url, token, { autoSubscribe: true });
+      await livekitRoom.localParticipant.setMicrophoneEnabled(true);
+
+      isRecording = true;
+      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('voiceWave').classList.add('active');
+      document.getElementById('msgInput').placeholder = 'Listening via LiveKit…';
+      setStatus('voice active — speak now');
+    } catch (e) {
+      setStatus(`voice error: ${e.message}`);
+      livekitRoom = null;
+    }
+  }
+}
+
+function stopMicUI() {
+  document.getElementById('micBtn').classList.remove('recording');
+  document.getElementById('voiceWave').classList.remove('active');
+  document.getElementById('msgInput').placeholder = 'Describe what you did or what you\'re about to do…';
+  if (sessionId && !isLoading) setStatus('session active');
 }
 
 // Auto-start with default worker on load

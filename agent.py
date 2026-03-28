@@ -170,8 +170,9 @@ Return ONLY valid JSON, no markdown, no explanation."""
 
 
 class FieldServiceAgent:
-    def __init__(self, store: DataStore):
+    def __init__(self, store: DataStore, model: str = "claude-sonnet-4-20250514"):
         self.store = store
+        self.model = model
         self.client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
     def _build_system_prompt(self, worker_id: str, date: str) -> str:
@@ -211,7 +212,7 @@ class FieldServiceAgent:
             messages.append({"role": role, "content": msg["content"]})
 
         response = self.client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=self.model,
             max_tokens=1024,
             system=system_prompt,
             messages=messages,
@@ -238,7 +239,7 @@ class FieldServiceAgent:
         })
 
         response = self.client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model=self.model,
             max_tokens=2048,
             system=system_prompt,
             messages=messages,
