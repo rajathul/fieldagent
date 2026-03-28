@@ -4,7 +4,7 @@ import asyncio
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
+from fastapi.responses import StreamingResponse, FileResponse
 
 load_dotenv()
 
@@ -174,6 +174,16 @@ async def sse_stream():
 @app.get("/health")
 def health():
     return {"status": "ok"}
+
+
+@app.get("/")
+def serve_chat():
+    return FileResponse("chat_ui.html")
+
+
+@app.get("/dashboard")
+def serve_dashboard():
+    return FileResponse("dashboard.html")
 
 
 if __name__ == "__main__":

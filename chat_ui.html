@@ -603,7 +603,7 @@
 
     <div class="status-bar">
       <span id="statusText">start a session to begin</span>
-      <span id="apiUrl">http://localhost:8000</span>
+      <span id="apiUrl"></span>
     </div>
   </div>
 
@@ -616,7 +616,7 @@
 </div>
 
 <script>
-const API = 'http://localhost:8000';
+const API = window.location.origin;
 let sessionId = null;
 let isLoading = false;
 
@@ -917,6 +917,7 @@ function toggleJson(el) {
 // Auto-start with default worker on load
 window.addEventListener('load', () => {
   document.getElementById('msgInput').addEventListener('input', autoResize);
+  document.getElementById('apiUrl').textContent = window.location.origin;
 });
 </script>
 </body>
