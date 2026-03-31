@@ -32,7 +32,11 @@ CONVERSATION RULES:
 
 2. BEFORE WORK STARTS — check immediately:
    - Does the worker hold the required certification? (Refrigerant work requires a Refrigerant Handling Certificate per EU F-gas Regulation 517/2014)
-   - Has this period's scheduled maintenance already been done? (Check work_history)
+   - Has this work already been logged? Check BOTH:
+     a. work_history — for historical records
+     b. recent_logged_work — for work logged in this system today or recently (THIS TAKES PRIORITY — always check here first)
+   - A duplicate means: same worker, same site, same service category, same date (or very close date), same or very similar description.
+   - If a duplicate is found, flag it as severity: warning and set billable: false. Explain what the previous entry was.
    - If either check fails, STOP the worker BEFORE they start. Explain why clearly.
 
 3. GATHER MISSING INFO — don't guess, ask:
@@ -94,7 +98,7 @@ CONVERSATION RULES:
 12. COMPLIANCE FLAGS — always create entries for:
     - Uncertified worker performing restricted work → severity: critical
     - Work outside contract hours → severity: warning
-    - Duplicate maintenance → severity: warning
+    - Duplicate work (same site, same category, same date, similar description) → severity: warning
     - Cost limit exceeded without approval → severity: warning
     - Non-catalog materials without required approval → severity: warning
 
@@ -175,7 +179,7 @@ class FieldServiceAgent:
         self.model = model
         self.client = Anthropic(api_key=os.environ.get("ANTHROPIC_API_KEY"))
 
-    def _build_system_prompt(self, worker_id: str, date: str) -> str:
+    def _build_system_prompt(self, worker_id: str, date: str, recent_logs: list[dict] | None = None) -> str:
         worker = self.store.get_worker(worker_id)
         if not worker:
             raise ValueError(f"Worker {worker_id} not found")
@@ -185,7 +189,11 @@ class FieldServiceAgent:
             for c in worker.get("certifications", [])
         ]
 
-        all_data = json.dumps(self.store.as_context_dict(), indent=2)
+        context = self.store.as_context_dict()
+        if recent_logs:
+            context["recent_logged_work"] = recent_logs
+
+        all_data = json.dumps(context, indent=2)
 
         return SYSTEM_PROMPT_TEMPLATE.format(
             date=date,
@@ -198,12 +206,12 @@ class FieldServiceAgent:
             finalize_marker=FINALIZE_MARKER,
         )
 
-    def chat(self, worker_id: str, date: str, history: list[dict]) -> str:
+    def chat(self, worker_id: str, date: str, history: list[dict], recent_logs: list[dict] | None = None) -> str:
         """
         Send the conversation history to Claude and get the next agent response.
         history: list of {"role": "worker"|"agent", "content": "..."}
         """
-        system_prompt = self._build_system_prompt(worker_id, date)
+        system_prompt = self._build_system_prompt(worker_id, date, recent_logs)
 
         # Convert our role names to Anthropic's expected user/assistant
         messages = []
@@ -219,12 +227,12 @@ class FieldServiceAgent:
         )
         return response.content[0].text
 
-    def extract_work_log(self, worker_id: str, date: str, history: list[dict]) -> WorkLog | None:
+    def extract_work_log(self, worker_id: str, date: str, history: list[dict], recent_logs: list[dict] | None = None) -> WorkLog | None:
         """
         After the worker confirms, make a second Claude call to extract
         a structured WorkLog from the conversation.
         """
-        system_prompt = self._build_system_prompt(worker_id, date)
+        system_prompt = self._build_system_prompt(worker_id, date, recent_logs)
 
         # Build conversation for extraction
         messages = []

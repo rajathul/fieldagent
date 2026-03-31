@@ -6,7 +6,6 @@
 <title>FieldAgent — Work Reporting</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="https://cdn.jsdelivr.net/npm/livekit-client@2/dist/livekit-client.umd.min.js"></script>
 <style>
   :root {
     --bg: #0e1117;
@@ -29,11 +28,19 @@
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html {
+    overflow: hidden;
+    max-width: 100vw;
+  }
+
   body {
     font-family: var(--sans);
     background: var(--bg);
     color: var(--text);
     height: 100dvh;
+    height: 100vh; /* fallback for browsers without dvh */
+    height: 100dvh;
+    max-width: 100vw;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -96,7 +103,7 @@
     outline: none;
   }
 
-  select { flex: 1; }
+  select { flex: 1; min-width: 0; max-width: 100%; }
 
   select:focus, .session-bar button:hover {
     border-color: var(--accent);
@@ -128,6 +135,7 @@
     display: flex;
     flex: 1;
     overflow: hidden;
+    min-width: 0;
   }
 
   /* ── Chat panel ── */
@@ -136,11 +144,13 @@
     flex-direction: column;
     flex: 1;
     overflow: hidden;
+    min-width: 0; /* prevent flex child overflow */
   }
 
   .messages {
     flex: 1;
     overflow-y: auto;
+    overflow-x: hidden;
     padding: 24px 20px;
     display: flex;
     flex-direction: column;
@@ -244,10 +254,13 @@
 
   .bubble {
     max-width: 72%;
+    min-width: 0;
     padding: 12px 16px;
     border-radius: 12px;
     font-size: 14px;
     line-height: 1.65;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
   }
 
   .msg.agent .bubble {
@@ -476,6 +489,7 @@
 
   .input-wrap {
     flex: 1;
+    min-width: 0; /* prevent overflow */
     background: var(--surface2);
     border: 1px solid var(--border);
     border-radius: 10px;
@@ -493,6 +507,7 @@
 
   textarea {
     flex: 1;
+    min-width: 0;
     background: transparent;
     border: none;
     outline: none;
@@ -560,7 +575,74 @@
     50%       { box-shadow: 0 0 0 6px rgba(255,95,95,0); }
   }
 
-  /* ── Voice wave (shown inside input-wrap while recording) ── */
+  /* ── Voice panel (replaces input-wrap in voice mode) ── */
+  .voice-panel {
+    display: none;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    min-height: 44px;
+  }
+
+  .input-bar.voice-mode .input-wrap  { display: none; }
+  .input-bar.voice-mode #modeSwitchBtn { display: none; }
+  .input-bar.voice-mode .send-btn    { display: none; }
+  .input-bar.voice-mode .voice-panel { display: flex; }
+
+  .voice-record-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .voice-record-btn:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .voice-record-btn.recording {
+    background: rgba(255,95,95,0.15);
+    border-color: var(--danger);
+    color: var(--danger);
+    animation: mic-pulse 1.4s ease-in-out infinite;
+  }
+
+  .voice-record-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .voice-record-btn svg { width: 20px; height: 20px; }
+
+  .keyboard-btn {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+
+  .keyboard-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-dim);
+  }
+
+  .keyboard-btn svg { width: 18px; height: 18px; }
+
+  /* ── Voice wave (shown inside voice-panel while recording) ── */
   .voice-wave {
     display: none;
     align-items: center;
@@ -606,10 +688,107 @@
     justify-content: space-between;
   }
 
+  /* ── Worklog toggle button (mobile only, hidden on desktop) ── */
+  .worklog-toggle-btn {
+    display: none;
+    position: relative;
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    align-items: center; justify-content: center;
+    color: var(--text-muted);
+    transition: all 0.15s;
+    flex-shrink: 0;
+  }
+  .worklog-toggle-btn:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+  .worklog-toggle-btn svg { width: 15px; height: 15px; }
+  .wl-dot {
+    display: none;
+    position: absolute;
+    top: 5px; right: 5px;
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 4px var(--accent-glow);
+  }
+  .worklog-toggle-btn.has-log .wl-dot { display: block; }
+
+  /* ── Worklog close button (mobile only) ── */
+  .worklog-close-btn {
+    display: none;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 18px;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 4px;
+    transition: color 0.15s;
+  }
+  .worklog-close-btn:hover { color: var(--text); }
+
+  /* ── Backdrop for mobile worklog drawer ── */
+  .worklog-backdrop {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.55);
+    z-index: 99;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  .worklog-backdrop.active { display: block; }
+
   /* ── Responsive ── */
   @media (max-width: 700px) {
-    .worklog-panel { display: none; }
-    .bubble { max-width: 88%; }
+    /* Header: two rows on mobile */
+    header {
+      flex-wrap: wrap;
+      padding: 10px 14px;
+      gap: 8px;
+    }
+    .logo { font-size: 12px; }
+    .session-bar {
+      order: 3;
+      flex: none;
+      width: 100%;
+      max-width: none;
+    }
+    .session-info { display: none; }
+    .worklog-toggle-btn { display: flex; }
+    .worklog-close-btn { display: flex; align-items: center; }
+
+    /* Worklog panel: fixed slide-in drawer from the right */
+    .worklog-panel {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 88%;
+      max-width: 340px;
+      transform: translateX(105%);
+      transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      z-index: 100;
+      border-left: 1px solid var(--border);
+      display: flex; /* always in DOM — slides in via transform */
+    }
+    .worklog-panel.open { transform: translateX(0); }
+
+    .worklog-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Chat */
+    .bubble { max-width: 90%; }
+    .messages { padding: 16px 12px; gap: 12px; }
+
+    /* Input bar */
+    .input-bar { padding: 10px 12px; padding-bottom: max(10px, env(safe-area-inset-bottom)); }
+    .send-btn, .mic-btn { width: 44px; height: 44px; }
+    .voice-record-btn, .keyboard-btn { width: 48px; height: 48px; }
   }
 </style>
 </head>
@@ -631,6 +810,15 @@
     <button class="btn-start" onclick="startSession()">New Session</button>
   </div>
 
+  <button class="worklog-toggle-btn" id="worklogToggleBtn" onclick="toggleWorklog()" title="Work log">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"></path>
+      <rect x="8" y="2" width="8" height="4" rx="1" ry="1"></rect>
+      <line x1="9" y1="12" x2="15" y2="12"></line>
+      <line x1="9" y1="16" x2="13" y2="16"></line>
+    </svg>
+    <span class="wl-dot"></span>
+  </button>
   <div class="session-info" id="sessionInfo">no session</div>
 </header>
 
@@ -650,13 +838,8 @@
       </div>
     </div>
 
-    <div class="input-bar">
+    <div class="input-bar" id="inputBar">
       <div class="input-wrap">
-        <div class="voice-wave" id="voiceWave">
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
-          <div class="bar"></div>
-        </div>
         <textarea
           id="msgInput"
           placeholder="Describe what you did or what you're about to do..."
@@ -666,7 +849,31 @@
           disabled
         ></textarea>
       </div>
-      <button class="mic-btn" id="micBtn" onclick="toggleMic()" disabled title="Voice input">
+
+      <!-- Voice mode panel — mic + wave + keyboard, centred in place of the textarea -->
+      <div class="voice-panel" id="voicePanel">
+        <button class="voice-record-btn" id="voiceRecordBtn" onclick="toggleMic()" disabled title="Tap to record">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="9" y="2" width="6" height="11" rx="3"></rect>
+            <path d="M5 10a7 7 0 0 0 14 0"></path>
+            <line x1="12" y1="19" x2="12" y2="22"></line>
+            <line x1="8" y1="22" x2="16" y2="22"></line>
+          </svg>
+        </button>
+        <div class="voice-wave" id="voiceWave">
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+          <div class="bar"></div>
+        </div>
+        <button class="keyboard-btn" onclick="exitVoiceMode()" title="Switch to keyboard">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="4" width="20" height="16" rx="2"></rect>
+            <path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M8 12h.01M12 12h.01M16 12h.01M7 16h10"></path>
+          </svg>
+        </button>
+      </div>
+
+      <button class="mic-btn" id="modeSwitchBtn" onclick="enterVoiceMode()" disabled title="Switch to voice">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <rect x="9" y="2" width="6" height="11" rx="3"></rect>
           <path d="M5 10a7 7 0 0 0 14 0"></path>
@@ -688,8 +895,12 @@
     </div>
   </div>
 
-  <div class="worklog-panel">
-    <div class="worklog-header">Work Log</div>
+  <div class="worklog-backdrop" id="worklogBackdrop" onclick="toggleWorklog()"></div>
+  <div class="worklog-panel" id="worklogPanel">
+    <div class="worklog-header">
+      <span>Work Log</span>
+      <button class="worklog-close-btn" onclick="toggleWorklog()">✕</button>
+    </div>
     <div class="worklog-content" id="worklogContent">
       <div class="worklog-empty">work log appears<br>after confirmation</div>
     </div>
@@ -726,11 +937,13 @@ async function startSession() {
       `${data.worker_name} · ${date} · ${sessionId.slice(0, 8)}`;
     document.getElementById('msgInput').disabled = false;
     document.getElementById('sendBtn').disabled = false;
-    document.getElementById('micBtn').disabled = false;
+    document.getElementById('modeSwitchBtn').disabled = false;
+    document.getElementById('voiceRecordBtn').disabled = false;
     document.getElementById('msgInput').focus();
 
     clearMessages();
     clearWorkLog();
+    document.getElementById('worklogToggleBtn').classList.remove('has-log');
     setStatus('session active');
 
     addAgentMessage(`Hi ${data.worker_name.split(' ')[0]}! What have you been working on, or what are you about to do?`);
@@ -765,6 +978,7 @@ async function sendMessage() {
 
     hideTyping();
     addAgentMessage(data.response);
+    speakText(data.response);
 
     if (data.finalized && data.work_log) {
       renderWorkLog(data.work_log);
@@ -875,12 +1089,23 @@ function setStatus(text) {
   document.getElementById('statusText').textContent = text;
 }
 
+// ── Worklog panel toggle (mobile drawer) ─────────────────────
+function toggleWorklog() {
+  const panel = document.getElementById('worklogPanel');
+  const backdrop = document.getElementById('worklogBackdrop');
+  const isOpen = panel.classList.contains('open');
+  panel.classList.toggle('open', !isOpen);
+  backdrop.classList.toggle('active', !isOpen);
+}
+
 function setLoading(v) {
   isLoading = v;
-  document.getElementById('sendBtn').disabled = v;
-  document.getElementById('msgInput').disabled = v;
-  document.getElementById('micBtn').disabled = v || !sessionId;
-  if (!v) document.getElementById('msgInput').focus();
+  const inVoiceMode = document.getElementById('inputBar').classList.contains('voice-mode');
+  document.getElementById('sendBtn').disabled = v || !sessionId;
+  document.getElementById('msgInput').disabled = v || !sessionId;
+  document.getElementById('modeSwitchBtn').disabled = v || !sessionId;
+  document.getElementById('voiceRecordBtn').disabled = v || !sessionId;
+  if (!v && !inVoiceMode) document.getElementById('msgInput').focus();
 }
 
 function escHtml(str) {
@@ -992,6 +1217,12 @@ function renderWorkLog(log) {
   <pre class="json-raw">${escHtml(JSON.stringify(log, null, 2))}</pre>`;
 
   document.getElementById('worklogContent').innerHTML = html;
+
+  // Show dot indicator on mobile toggle button
+  document.getElementById('worklogToggleBtn').classList.add('has-log');
+
+  // Auto-open the drawer on mobile when work log is ready
+  if (window.innerWidth <= 700) toggleWorklog();
 }
 
 function toggleJson(el) {
@@ -1001,65 +1232,95 @@ function toggleJson(el) {
   el.textContent = open ? '▶ view raw json' : '▼ hide raw json';
 }
 
-// ── Voice / Mic (LiveKit) ────────────────────────────────────
-let livekitRoom = null;
+// ── TTS playback ─────────────────────────────────────────────
+let currentAudio = null;
+
+async function speakText(text) {
+  // Stop any currently playing audio
+  if (currentAudio) { currentAudio.pause(); currentAudio = null; }
+
+  try {
+    const res = await fetch(`${API}/speak`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text }),
+    });
+    if (!res.ok) return; // silently skip if TTS fails
+    const blob = await res.blob();
+    currentAudio = new Audio(URL.createObjectURL(blob));
+    currentAudio.play();
+  } catch (_) { /* non-fatal */ }
+}
+
+// ── Voice mode toggle ─────────────────────────────────────────
+function enterVoiceMode() {
+  document.getElementById('inputBar').classList.add('voice-mode');
+  setStatus('tap the mic to start recording');
+}
+
+function exitVoiceMode() {
+  if (isRecording && mediaRecorder) mediaRecorder.stop();
+  document.getElementById('inputBar').classList.remove('voice-mode');
+  if (sessionId && !isLoading) {
+    setStatus('session active');
+    document.getElementById('msgInput').focus();
+  }
+}
+
+// ── Voice / Mic (MediaRecorder → Whisper) ───────────────────
+let mediaRecorder = null;
+let audioChunks = [];
 let isRecording = false;
 
 async function toggleMic() {
   if (isRecording) {
-    isRecording = false;
-    stopMicUI();
-    if (livekitRoom) { await livekitRoom.disconnect(); livekitRoom = null; }
+    mediaRecorder.stop();
   } else {
-    setStatus('connecting voice…');
     try {
-      const res = await fetch(
-        `${API}/livekit-token?session_id=${sessionId}&worker_id=${encodeURIComponent(currentWorkerId)}&date=${encodeURIComponent(currentDate)}`
-      );
-      if (!res.ok) throw new Error(`token error ${res.status}`);
-      const { token, url } = await res.json();
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioChunks = [];
+      mediaRecorder = new MediaRecorder(stream);
 
-      livekitRoom = new LivekitClient.Room();
+      mediaRecorder.ondataavailable = (e) => {
+        if (e.data.size > 0) audioChunks.push(e.data);
+      };
 
-      livekitRoom.on(LivekitClient.RoomEvent.TrackSubscribed, (track) => {
-        if (track.kind === LivekitClient.Track.Kind.Audio) {
-          const el = track.attach();
-          el.id = 'lk-agent-audio';
-          document.body.appendChild(el);
-        }
-      });
-
-      livekitRoom.on(LivekitClient.RoomEvent.TrackUnsubscribed, (track) => {
-        track.detach().forEach(el => el.remove());
-      });
-
-      livekitRoom.on(LivekitClient.RoomEvent.Disconnected, () => {
+      mediaRecorder.onstop = async () => {
+        stream.getTracks().forEach(t => t.stop());
         isRecording = false;
-        stopMicUI();
-        const el = document.getElementById('lk-agent-audio');
-        if (el) el.remove();
-      });
+        document.getElementById('voiceRecordBtn').classList.remove('recording');
+        document.getElementById('voiceWave').classList.remove('active');
 
-      await livekitRoom.connect(url, token, { autoSubscribe: true });
-      await livekitRoom.localParticipant.setMicrophoneEnabled(true);
+        const blob = new Blob(audioChunks, { type: mediaRecorder.mimeType });
+        audioChunks = [];
 
+        setStatus('transcribing…');
+        try {
+          const form = new FormData();
+          form.append('audio', blob, 'recording.webm');
+          const res = await fetch(`${API}/transcribe`, { method: 'POST', body: form });
+          if (!res.ok) throw new Error(`transcribe error ${res.status}`);
+          const { text } = await res.json();
+          if (text && text.trim()) {
+            document.getElementById('msgInput').value = text.trim();
+            sendMessage();  // sendMessage manages isLoading itself
+          } else {
+            setStatus('no speech detected — tap mic to try again');
+          }
+        } catch (e) {
+          setStatus(`voice error: ${e.message}`);
+        }
+      };
+
+      mediaRecorder.start();
       isRecording = true;
-      document.getElementById('micBtn').classList.add('recording');
+      document.getElementById('voiceRecordBtn').classList.add('recording');
       document.getElementById('voiceWave').classList.add('active');
-      document.getElementById('msgInput').placeholder = 'Listening via LiveKit…';
-      setStatus('voice active — speak now');
+      setStatus('recording — tap mic to stop');
     } catch (e) {
-      setStatus(`voice error: ${e.message}`);
-      livekitRoom = null;
+      setStatus(`mic error: ${e.message}`);
     }
   }
-}
-
-function stopMicUI() {
-  document.getElementById('micBtn').classList.remove('recording');
-  document.getElementById('voiceWave').classList.remove('active');
-  document.getElementById('msgInput').placeholder = 'Describe what you did or what you\'re about to do…';
-  if (sessionId && !isLoading) setStatus('session active');
 }
 
 // Auto-start with default worker on load

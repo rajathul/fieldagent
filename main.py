@@ -1,11 +1,12 @@
+import io
 import os
 import json
 import asyncio
 from dotenv import load_dotenv
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse, FileResponse
-from livekit.api import AccessToken, VideoGrants
+from fastapi.responses import Response, StreamingResponse, FileResponse
+from openai import OpenAI
 
 load_dotenv()
 
@@ -93,7 +94,8 @@ def send_message(body: MessageRequest) -> MessageResponse:
     # Get agent response
     store = get_store()
     agent = FieldServiceAgent(store)
-    raw_response = agent.chat(worker_id, date, history)
+    recent_logs = get_work_logs(worker_id=worker_id)
+    raw_response = agent.chat(worker_id, date, history, recent_logs)
 
     finalized = agent.is_finalized(raw_response)
     clean_response = agent.clean_response(raw_response)
@@ -105,7 +107,7 @@ def send_message(body: MessageRequest) -> MessageResponse:
     if finalized:
         # Second call: extract structured work log
         full_history = get_messages(body.session_id)
-        work_log = agent.extract_work_log(worker_id, date, full_history)
+        work_log = agent.extract_work_log(worker_id, date, full_history, recent_logs)
         if work_log:
             save_work_log(body.session_id, work_log)
             print(f"[main] Work log saved for session {body.session_id}: "
@@ -172,25 +174,50 @@ async def sse_stream():
     )
 
 
-@app.get("/livekit-token")
-def get_livekit_token(session_id: str, worker_id: str, date: str):
-    lk_url = os.getenv("LIVEKIT_URL")
-    lk_key = os.getenv("LIVEKIT_API_KEY")
-    lk_secret = os.getenv("LIVEKIT_API_SECRET")
-    if not all([lk_url, lk_key, lk_secret]):
-        raise HTTPException(status_code=500, detail="LiveKit env vars not configured")
+@app.post("/transcribe")
+async def transcribe_audio(audio: UploadFile = File(...)) -> dict:
+    """
+    Accept a recorded audio blob, transcribe it with OpenAI Whisper,
+    and return the text.
+    """
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY not set")
 
-    room_name = f"fieldagent-{session_id}"
-    metadata = json.dumps({"worker_id": worker_id, "date": date, "session_id": session_id})
-    token = (
-        AccessToken(lk_key, lk_secret)
-        .with_identity(worker_id)
-        .with_name(worker_id)
-        .with_metadata(metadata)
-        .with_grants(VideoGrants(room_join=True, room=room_name))
-        .to_jwt()
+    audio_bytes = await audio.read()
+    # Give it a filename so Whisper can infer the format (webm from MediaRecorder)
+    audio_file = io.BytesIO(audio_bytes)
+    audio_file.name = audio.filename or "recording.webm"
+
+    client = OpenAI(api_key=api_key)
+    transcript = client.audio.transcriptions.create(
+        model="whisper-1",
+        file=audio_file,
     )
-    return {"token": token, "room": room_name, "url": lk_url}
+    return {"text": transcript.text}
+
+
+@app.post("/speak")
+async def speak_text(body: dict) -> Response:
+    """
+    Accept {"text": "..."} and return an MP3 audio stream via OpenAI TTS.
+    """
+    text = (body.get("text") or "").strip()
+    if not text:
+        raise HTTPException(status_code=400, detail="text is required")
+
+    api_key = os.getenv("OPENAI_API_KEY")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENAI_API_KEY not set")
+
+    client = OpenAI(api_key=api_key)
+    tts_response = client.audio.speech.create(
+        model="tts-1",
+        voice="alloy",
+        input=text,
+        response_format="mp3",
+    )
+    return Response(content=tts_response.content, media_type="audio/mpeg")
 
 
 @app.get("/health")

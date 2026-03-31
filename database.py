@@ -34,7 +34,7 @@ def init_db():
 
             CREATE TABLE IF NOT EXISTS work_logs (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                session_id TEXT NOT NULL REFERENCES sessions(id),
+                session_id TEXT NOT NULL UNIQUE REFERENCES sessions(id),
                 customer_id TEXT,
                 worker_id TEXT,
                 site_id TEXT,
@@ -86,7 +86,7 @@ def save_work_log(session_id: str, work_log: WorkLog):
     log_dict = work_log.model_dump()
     with get_connection() as conn:
         conn.execute(
-            """INSERT INTO work_logs
+            """INSERT OR IGNORE INTO work_logs
                (session_id, customer_id, worker_id, site_id, log_date, status, billable, log_json)
                VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
             (
